@@ -36,7 +36,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /* implementation */
 
-DuelMatch::DuelMatch(bool remote, std::string rules, int score_to_win) :
+DuelMatch::DuelMatch(bool remote, const std::string& rules, int score_to_win) :
 		// we send a pointer to an unconstructed object here!
 		mLogic(createGameLogic(rules, this, score_to_win == 0 ? IUserConfigReader::createUserConfigReader("config.xml")->getInteger("scoretowin") : score_to_win)),
 		mPaused(false),
@@ -50,13 +50,13 @@ DuelMatch::DuelMatch(bool remote, std::string rules, int score_to_win) :
 		mPhysicWorld->setEventCallback( [this]( const MatchEvent& event ) { mEvents.push_back(event); } );
 }
 
-void DuelMatch::setPlayers( PlayerIdentity lplayer, PlayerIdentity rplayer)
+void DuelMatch::setPlayers( const PlayerIdentity& lplayer, const PlayerIdentity& rplayer)
 {
 	mPlayers[LEFT_PLAYER] = lplayer;
 	mPlayers[RIGHT_PLAYER] = rplayer;
 }
 
-void DuelMatch::setInputSources(boost::shared_ptr<InputSource> linput, boost::shared_ptr<InputSource> rinput )
+void DuelMatch::setInputSources(const boost::shared_ptr<InputSource>& linput, const boost::shared_ptr<InputSource>& rinput )
 {
 	if(linput)
 		mInputSources[LEFT_PLAYER] = linput;
@@ -74,11 +74,9 @@ void DuelMatch::reset()
 	mLogic = mLogic->clone();
 }
 
-DuelMatch::~DuelMatch()
-{
-}
+DuelMatch::~DuelMatch() = default;
 
-void DuelMatch::setRules(std::string rulesFile, int score_to_win)
+void DuelMatch::setRules(const std::string& rulesFile, int score_to_win)
 {
 	if( score_to_win == 0)
 		score_to_win = getScoreToWin();

@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <iostream>
 #include <algorithm>
 #include <set>
+#include <utility>
 
 #include "tinyxml/tinyxml.h"
 
@@ -32,10 +33,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "FileRead.h"
 
 /* implementation */
-TextManager* TextManager::mSingleton = 0;
+TextManager* TextManager::mSingleton = nullptr;
 
 
-TextManager* TextManager::createTextManager(std::string langname){
+TextManager* TextManager::createTextManager(const std::string& langname){
 	delete mSingleton;
 
 	mSingleton = new TextManager(langname);
@@ -47,7 +48,7 @@ TextManager* TextManager::createTextManager(std::string langname){
 		loaded = mSingleton->loadFromXML(langfile);
 	}catch(FileLoadException& fle){
 		std::cerr << fle.what() << std::endl;
-	};
+	}
 
 	if(!loaded){
 		std::cerr << "error loading language " << langfile << "!" << std::endl;
@@ -61,12 +62,12 @@ const TextManager* TextManager::getSingleton(){
 	return mSingleton;
 }
 
-TextManager::TextManager(std::string l):lang(l){
+TextManager::TextManager(std::string l):lang(std::move(l)) {
 	mStrings.resize(COUNT);
 	setDefault();
 }
 
-void TextManager::switchLanguage(std::string langname){
+void TextManager::switchLanguage(const std::string& langname){
 	// if old and new language are the same, nothing must be done
 	if(langname == mSingleton->lang)
 		return;
@@ -83,7 +84,7 @@ std::string TextManager::getLang() const{
 }
 
 /// \todo why no const std::string& ?
-bool TextManager::loadFromXML(std::string filename){
+bool TextManager::loadFromXML(const std::string& filename){
 	// read and parse file
 	boost::shared_ptr<TiXmlDocument> language_data = FileRead::readXMLDocument(filename);
 
@@ -126,7 +127,7 @@ bool TextManager::loadFromXML(std::string filename){
 			stringsToTranslate.erase( std::string(e) );
 			#endif // DEBUG
 			// search the english string and replace it with the translation
-			std::vector<std::string>::iterator found = std::find(mStrings.begin(), mStrings.end(), e);
+			auto found = std::find(mStrings.begin(), mStrings.end(), e);
 			if(found != mStrings.end())
 			{
 				found_count++;

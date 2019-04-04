@@ -56,11 +56,9 @@ VersionMismatchException::VersionMismatchException(const std::string& filename, 
 	error = errorstr.str();
 }
 
-VersionMismatchException::~VersionMismatchException() throw()
-{
-}
+VersionMismatchException::~VersionMismatchException() noexcept = default;
 
-const char* VersionMismatchException::what() const throw()
+const char* VersionMismatchException::what() const noexcept
 {
 	return error.c_str();
 }
@@ -72,9 +70,8 @@ ReplayRecorder::ReplayRecorder()
 	mGameSpeed = -1;
 }
 
-ReplayRecorder::~ReplayRecorder()
-{
-}
+ReplayRecorder::~ReplayRecorder() = default;
+
 template<class T>
 void writeAttribute(FileWrite& file, const char* name, const T& value)
 {
@@ -83,7 +80,7 @@ void writeAttribute(FileWrite& file, const char* name, const T& value)
 	file.write( stream.str() );
 }
 
-void ReplayRecorder::save( boost::shared_ptr<FileWrite> file) const
+void ReplayRecorder::save( const boost::shared_ptr<FileWrite>& file) const
 {
 	constexpr const char* xmlHeader = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\n<replay>\n";
 	constexpr const char* xmlFooter = "</replay>\n\n";
@@ -99,7 +96,7 @@ void ReplayRecorder::save( boost::shared_ptr<FileWrite> file) const
 	writeAttribute(*file, "game_speed", mGameSpeed);
 	writeAttribute(*file, "game_length", mSaveData.size());
 	writeAttribute(*file, "game_duration", mSaveData.size() / mGameSpeed);
-	writeAttribute(*file, "game_date", std::time(0));
+	writeAttribute(*file, "game_date", std::time(nullptr));
 
 	writeAttribute(*file, "score_left", mEndScore[LEFT_PLAYER]);
 	writeAttribute(*file, "score_right", mEndScore[RIGHT_PLAYER]);
@@ -139,7 +136,7 @@ void ReplayRecorder::save( boost::shared_ptr<FileWrite> file) const
 	file->write(xmlFooter);
 	file->close();
 }
-void ReplayRecorder::send(boost::shared_ptr<GenericOut> target) const
+void ReplayRecorder::send(const boost::shared_ptr<GenericOut>& target) const
 {
 	target->string(mPlayerNames[LEFT_PLAYER]);
 	target->string(mPlayerNames[RIGHT_PLAYER]);
@@ -157,7 +154,7 @@ void ReplayRecorder::send(boost::shared_ptr<GenericOut> target) const
 	target->generic<std::vector<ReplaySavePoint> > (mSavePoints);
 }
 
-void ReplayRecorder::receive(boost::shared_ptr<GenericIn> source)
+void ReplayRecorder::receive(const boost::shared_ptr<GenericIn>& source)
 {
 	source->string(mPlayerNames[LEFT_PLAYER]);
 	source->string(mPlayerNames[RIGHT_PLAYER]);
@@ -220,7 +217,7 @@ void ReplayRecorder::setGameSpeed(int fps)
 	mGameSpeed = fps;
 }
 
-void ReplayRecorder::setGameRules( std::string rules )
+void ReplayRecorder::setGameRules( const std::string& rules )
 {
 	FileRead file(FileRead::makeLuaFilename("rules/"+rules));
 	mGameRules.resize( file.length() );

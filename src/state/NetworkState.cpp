@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* includes */
 #include <algorithm>
 #include <iostream>
+#include <utility>
 #include <ctime>
 
 #include <boost/lexical_cast.hpp>
@@ -62,7 +63,7 @@ int CURRENT_NETWORK_LAG = -1;
 /* implementation */
 NetworkGameState::NetworkGameState( boost::shared_ptr<RakClient> client, int rule_checksum, int score_to_win):
 	 GameState(new DuelMatch(true, DEFAULT_RULES_FILE, score_to_win)),
-	 mClient( client ),
+	 mClient(std::move(client)),
 	 mNetworkState(WAITING_FOR_OPPONENT),
 	 mWinningPlayer(NO_PLAYER),
 	 mWaitingForReplay(false),
@@ -235,7 +236,7 @@ void NetworkGameState::step_impl()
 				// read colors
 				int temp;
 				stream.Read(temp);
-				Color ncolor = temp;
+				Color ncolor = Color(temp);
 
 				mRemotePlayer->setName(charName);
 
@@ -397,7 +398,7 @@ void NetworkGameState::step_impl()
 		mSaveReplay = false;
 		IMGUI::getSingleton().resetSelection();
 	}
-	else if (mErrorMessage != "")
+	else if (!mErrorMessage.empty())
 	{
 		displayErrorMessageBox();
 	}
@@ -546,7 +547,7 @@ void NetworkGameState::step_impl()
 			{
 
 				// GUI-Hack, so that we can send messages
-				if ((InputManager::getSingleton()->getLastActionKey() == "Return") && (mChattext != ""))
+				if ((InputManager::getSingleton()->getLastActionKey() == "Return") && (!mChattext.empty()))
 				{
 					RakNet::BitStream stream;
 					char message[31];

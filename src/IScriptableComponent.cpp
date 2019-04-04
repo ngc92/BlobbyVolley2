@@ -33,7 +33,7 @@ IScriptableComponent::~IScriptableComponent()
 	lua_close(mState);
 }
 
-void IScriptableComponent::openScript(std::string file)
+void IScriptableComponent::openScript(const std::string& file)
 {
 	int error = FileRead::readLuaScript(file, mState);
 	if (error == 0)
@@ -123,7 +123,7 @@ int lua_pushvector(lua_State* state, const Vector2& v, VectorType type)
 		lua_pushnumber( state, v.x );
 		lua_pushnumber( state, -v.y );
 	}
-	 else if ( type == VectorType::POSITION )
+	else if ( type == VectorType::POSITION )
 	{
 		lua_pushnumber( state, v.x );
 		lua_pushnumber( state, 600 - v.y );
@@ -153,8 +153,8 @@ struct IScriptableComponent::Access
 	}
 };
 
-inline DuelMatch* getMatch( lua_State* s )  { return IScriptableComponent::Access::getMatch(s); };
-inline PhysicWorld* getWorld( lua_State* s )  { return IScriptableComponent::Access::getWorld(s); };
+inline DuelMatch* getMatch( lua_State* s )  { return IScriptableComponent::Access::getMatch(s); }
+inline PhysicWorld* getWorld( lua_State* s )  { return IScriptableComponent::Access::getWorld(s); }
 
 // standard lua functions
 int get_ball_pos(lua_State* state)
@@ -209,7 +209,7 @@ int set_blob_data(lua_State* state)
 int get_blob_pos(lua_State* state)
 {
 	auto s = getMatch( state );
-	PlayerSide side = (PlayerSide)lua_toint(state, -1);
+	auto side = (PlayerSide)lua_toint(state, -1);
 	lua_pop(state, 1);
 	assert( side == LEFT_PLAYER || side == RIGHT_PLAYER );
 	return lua_pushvector(state, s->getBlobPosition(side), VectorType::POSITION);
@@ -218,7 +218,7 @@ int get_blob_pos(lua_State* state)
 int get_blob_vel(lua_State* state)
 {
 	auto s = getMatch( state );
-	PlayerSide side = (PlayerSide)lua_toint(state, -1);
+	auto side = (PlayerSide)lua_toint(state, -1);
 	lua_pop(state, 1);
 	assert( side == LEFT_PLAYER || side == RIGHT_PLAYER );
 	return lua_pushvector(state, s->getBlobVelocity(side), VectorType::VELOCITY);
@@ -227,7 +227,7 @@ int get_blob_vel(lua_State* state)
 int get_score( lua_State* state )
 {
 	auto s = getMatch( state );
-	PlayerSide side = (PlayerSide)lua_toint(state, -1);
+	auto side = (PlayerSide)lua_toint(state, -1);
 	lua_pop(state, 1);
 	assert( side == LEFT_PLAYER || side == RIGHT_PLAYER );
 	lua_pushinteger(state, s->getScore(side));
@@ -237,7 +237,7 @@ int get_score( lua_State* state )
 int get_touches( lua_State* state )
 {
 	auto s = getMatch( state );
-	PlayerSide side = (PlayerSide)lua_toint(state, -1);
+	auto side = (PlayerSide)lua_toint(state, -1);
 	lua_pop(state, 1);
 	assert( side == LEFT_PLAYER || side == RIGHT_PLAYER );
 	lua_pushinteger(state, s->getTouches(side));

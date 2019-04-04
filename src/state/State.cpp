@@ -70,7 +70,7 @@ void State::step()
 	if( mStateToSwitchTo != nullptr )
 	{
 		// maybe this debug statuses will help pinpointing crashes faster
-		DEBUG_STATUS( std::string("switching to state ") + mStateToSwitchTo->getStateName());
+		DEBUG_STATUS( std::string("switching to state ") + mStateToSwitchTo->getStateName())
 
 		// if yes, set that new state
 		// use swap so the states do not get destroyed here
@@ -106,9 +106,7 @@ MainMenuState::MainMenuState()
 	SpeedController::getMainInstance()->setGameSpeed(75);
 }
 
-MainMenuState::~MainMenuState()
-{
-}
+MainMenuState::~MainMenuState() = default;
 
 void MainMenuState::step_impl()
 {

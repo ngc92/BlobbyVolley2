@@ -41,7 +41,7 @@ class ReplayRecorder;
 class State
 {
 public:
-	virtual ~State() {}
+	virtual ~State() = default;
 
 	// step function defines the steps actual work
 	virtual void step_impl() = 0;
@@ -80,9 +80,9 @@ class MainMenuState : public State
 {
 public:
 	MainMenuState();
-	virtual ~MainMenuState();
-	virtual void step_impl();
-	virtual const char* getStateName() const;
+	~MainMenuState() override;
+	void step_impl() override;
+	const char* getStateName() const override;
 };
 
 /*! \class CreditsState
@@ -92,8 +92,8 @@ class CreditsState : public State
 {
 public:
 	CreditsState();
-	virtual void step_impl();
-	virtual const char* getStateName() const;
+	void step_impl() override;
+	const char* getStateName() const override;
 private:
 	float mYPosition;
 };

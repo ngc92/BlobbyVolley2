@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* includes */
 #include <limits>
 #include <iostream>
+#include <utility>
 
 #include "raknet/BitStream.h"
 
@@ -55,9 +56,7 @@ PhysicWorld::PhysicWorld()
 	mBlobPosition[RIGHT_PLAYER] = Vector2(600, GROUND_PLANE_HEIGHT);
 }
 
-PhysicWorld::~PhysicWorld()
-{
-}
+PhysicWorld::~PhysicWorld() = default;
 
 bool PhysicWorld::blobHitGround(PlayerSide player) const
 {
@@ -406,7 +405,7 @@ void PhysicWorld::setState(const PhysicState& ps)
 
 void PhysicWorld::setEventCallback( event_callback_fn cb )
 {
-	mCallback = cb;
+	mCallback = std::move(cb);
 }
 
 inline short set_fpu_single_precision()

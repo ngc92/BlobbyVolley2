@@ -30,8 +30,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 class InputDevice : public ObjectCounter<InputDevice>
 {
 	public:
-		InputDevice() {}
-		virtual ~InputDevice() {}
+		InputDevice() = default;
+		virtual ~InputDevice() = default;
 
 		virtual PlayerInputAbs transferInput() = 0;
 };
@@ -39,6 +39,6 @@ class InputDevice : public ObjectCounter<InputDevice>
 struct JoystickAction;
 
 InputDevice* createKeyboardInput(SDL_Keycode left, SDL_Keycode right, SDL_Keycode jump);
-InputDevice* createJoystrickInput(JoystickAction left, JoystickAction right, JoystickAction jump);
+InputDevice* createJoystrickInput(const JoystickAction& left, const JoystickAction& right, const JoystickAction& jump);
 InputDevice* createTouchInput(PlayerSide side, int type);
 InputDevice* createMouseInput(PlayerSide player, int jumpbutton, float sensitivity);

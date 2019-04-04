@@ -23,9 +23,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <set>
 #include <algorithm>
 #include <iostream>
+#include <utility>
 
 #include <boost/make_shared.hpp>
-
 #include "raknet/RakServer.h"
 #include "raknet/PacketEnumerations.h"
 
@@ -45,7 +45,7 @@ extern int SWLS_Games;
 
 void syslog(int pri, const char* format, ...);
 
-DedicatedServer::DedicatedServer(const ServerInfo& info,
+DedicatedServer::DedicatedServer(ServerInfo info,
 								const std::vector<std::string>& rulefiles,
 								const std::vector<float>& gamespeeds,
 								int max_clients, bool local_server)
@@ -53,7 +53,7 @@ DedicatedServer::DedicatedServer(const ServerInfo& info,
 , mServer(new RakServer())
 , mAcceptNewPlayers(true)
 , mPlayerHosted( local_server )
-, mServerInfo(info)
+, mServerInfo(std::move(info))
 {
 	if (!mServer->Start(max_clients, 1, mServerInfo.port))
 	{
@@ -183,7 +183,7 @@ void DedicatedServer::processPackets()
 					}
 					mMatchMaker.removePlayer( player->first );
 				}
-				 else
+				else
 				{
 				}
 
@@ -251,9 +251,9 @@ void DedicatedServer::updateGames()
 	// this loop ensures that all games that have finished (eg because one
 	// player left) still process network packets, to let the other player
 	// finalize its interactions (sending replays etc).
-	for(auto it = mPlayerMap.begin(); it != mPlayerMap.end(); ++it)
+	for(auto & it : mPlayerMap)
 	{
-		auto game = it->second->getGame();
+		auto game = it.second->getGame();
 		if(game && !game->isGameValid())
 		{
 			game->processPackets();
@@ -271,7 +271,7 @@ void DedicatedServer::updateGames()
 					);
 			iter = mGameList.erase(iter);
 		}
-		 else
+		else
 		{
 			++iter;
 		}
@@ -311,12 +311,10 @@ void DedicatedServer::allowNewPlayers( bool allow )
 // debug
 void DedicatedServer::printAllPlayers(std::ostream& stream) const
 {
-	for( std::map< PlayerID, boost::shared_ptr<NetworkPlayer> >::const_iterator it = mPlayerMap.begin();
-	     it != mPlayerMap.end();
-	     ++it)
+	for(const auto & it : mPlayerMap)
 	{
-		stream << it->second->getID().toString() << " \"" << it->second->getName() << "\" status: ";
-		if( it->second->getGame() )
+		stream << it.second->getID().toString() << " \"" << it.second->getName() << "\" status: ";
+		if( it.second->getGame() )
 		{
 			stream << "playing\n";
 		} else
@@ -328,11 +326,9 @@ void DedicatedServer::printAllPlayers(std::ostream& stream) const
 
 void DedicatedServer::printAllGames(std::ostream& stream) const
 {
-	for( std::list< boost::shared_ptr<NetworkGame> >::const_iterator it = mGameList.begin();
-	     it != mGameList.end();
-	     ++it)
+	for(const auto & it : mGameList)
 	{
-		stream << (*it)->getPlayerID(LEFT_PLAYER).toString() << " vs " << (*it)->getPlayerID(RIGHT_PLAYER).toString() << "\n";
+		stream << it->getPlayerID(LEFT_PLAYER).toString() << " vs " << it->getPlayerID(RIGHT_PLAYER).toString() << "\n";
 	}
 }
 
@@ -392,7 +388,7 @@ void DedicatedServer::createGame(boost::shared_ptr<NetworkPlayer> left,
 								PlayerSide switchSide, std::string rules,
 								int scoreToWin, float gamespeed)
 {
-	auto newgame = boost::make_shared<NetworkGame>(*mServer.get(), left, right,
+	auto newgame = boost::make_shared<NetworkGame>(*mServer, left, right,
 								switchSide, rules, scoreToWin, gamespeed);
 	left->setGame( newgame );
 	right->setGame( newgame );
@@ -400,7 +396,7 @@ void DedicatedServer::createGame(boost::shared_ptr<NetworkPlayer> left,
 	SWLS_Games++;
 
 	/// \todo add some logging?
-	syslog(LOG_DEBUG, "Created game \"%s\" vs. \"%s\", rules:%s", left->getName().c_str(), right->getName().c_str(), rules.c_str());
+	syslog(LOG_DEBUG, R"(Created game "%s" vs. "%s", rules:%s)", left->getName().c_str(), right->getName().c_str(), rules.c_str());
 	mGameList.push_back(newgame);
 }
 

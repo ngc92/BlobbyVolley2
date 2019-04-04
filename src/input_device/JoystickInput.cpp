@@ -40,11 +40,11 @@ class JoystickInputDevice : public InputDevice
 		JoystickAction mRightAction;
 		JoystickAction mJumpAction;
 	public:
-		virtual ~JoystickInputDevice() {};
-		JoystickInputDevice(JoystickAction laction, JoystickAction raction,
-				JoystickAction jaction);
+		~JoystickInputDevice() override = default;;
+		JoystickInputDevice(const JoystickAction& laction, const JoystickAction& raction,
+				const JoystickAction& jaction);
 
-		virtual PlayerInputAbs transferInput();
+		PlayerInputAbs transferInput() override;
 };
 
 // ********************************************************************************************************
@@ -55,7 +55,7 @@ class JoystickInputDevice : public InputDevice
 //		Creator Function
 // -------------------------------------------------------------------------------------------------
 
-InputDevice* createJoystrickInput(JoystickAction left, JoystickAction right, JoystickAction jump)
+InputDevice* createJoystrickInput(const JoystickAction& left, const JoystickAction& right, const JoystickAction& jump)
 {
 	return new JoystickInputDevice(left, right, jump);
 }
@@ -64,19 +64,19 @@ InputDevice* createJoystrickInput(JoystickAction left, JoystickAction right, Joy
 // 		Joystick Input Device
 // -------------------------------------------------------------------------------------------------
 
-JoystickInputDevice::JoystickInputDevice(JoystickAction laction, JoystickAction raction, JoystickAction jaction)
+JoystickInputDevice::JoystickInputDevice(const JoystickAction& laction, const JoystickAction& raction, const JoystickAction& jaction)
 	: mLeftAction(laction), mRightAction(raction), mJumpAction(jaction)
 {
 }
 
 PlayerInputAbs JoystickInputDevice::transferInput()
 {
-	return PlayerInputAbs( getAction(mLeftAction), getAction(mRightAction),	getAction(mJumpAction) );
+	return { getAction(mLeftAction), getAction(mRightAction), getAction(mJumpAction) };
 }
 
 bool JoystickInputDevice::getAction(const JoystickAction& action)
 {
-	if (action.joy != 0)
+	if (action.joy != nullptr)
 	{
 		switch (action.type)
 		{

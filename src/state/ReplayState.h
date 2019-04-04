@@ -35,9 +35,9 @@ class ReplayState : public GameState
 {
 public:
 	ReplayState();
-	~ReplayState();
-	virtual void step_impl();
-	virtual const char* getStateName() const;
+	~ReplayState() override;
+	void step_impl() override;
+	const char* getStateName() const override;
 	void loadReplay(const std::string& replay);
 
 private:

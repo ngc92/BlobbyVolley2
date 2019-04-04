@@ -90,13 +90,9 @@ namespace ADT {
 		ContainerType array;
 	};
 
-	template <class QueueType> Queue<QueueType>::Queue()
-	{
-	}
+	template <class QueueType> Queue<QueueType>::Queue() = default;
 
-	template <class QueueType> Queue<QueueType>::~Queue()
-	{
-	}
+	template <class QueueType> Queue<QueueType>::~Queue() = default;
 
 	template <class QueueType> Queue<QueueType>::Queue(const Queue& original_copy)
 	{
@@ -158,7 +154,7 @@ namespace ADT {
 		return it != this->array.end();
 	}
 
-	template <class QueueType> inline const QueueType Queue<QueueType>::peek( void ) const
+	template <class QueueType> inline const QueueType Queue<QueueType>::peek( ) const
 	{
 		return this->array.front();
 	}

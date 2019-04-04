@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <exception>
 #include <SDL2/SDL_stdinc.h>
 #include <cstring>
-
+#include <utility>
 // I hope the GP2X is the only combination of these systems
 #if defined(__linux__) && defined(__arm__)
 #define GP2X GP2X
@@ -93,15 +93,15 @@ struct Color
 	{}
 
 	/// \sa toInt()
-	Color(unsigned int col)
-	: r(col&0xff)
-	, g((col>>8)&0xff)
-	, b((col>>16)&0xff)
+	explicit Color(unsigned int col)
+	: r(col & 0xffu)
+	, g((col>>8u) & 0xffu)
+	, b((col>>16u) & 0xffu)
 	{
 
 	}
 
-	Color() {}
+	Color() = default;
 
 	union
 	{
@@ -126,10 +126,10 @@ struct Color
 
 	unsigned int toInt() const
 	{
-		int i = 0;
+		unsigned i = 0u;
 		i |= r;
-		i |= g << 8;
-		i |= b << 16;
+		i |= g << 8u;
+		i |= b << 16u;
 		return i;
 	}
 
@@ -139,14 +139,14 @@ struct Color
 struct ExtensionUnsupportedException : public std::exception
 {
 	std::string extension;
-	ExtensionUnsupportedException(std::string name) : extension(name) {}
-	~ExtensionUnsupportedException() throw() {}
+	explicit ExtensionUnsupportedException(std::string name) : extension(std::move(name)) {}
+	~ExtensionUnsupportedException() noexcept override = default;
 };
 
 struct ScriptException : public std::exception
 {
 	std::string luaerror;
-	~ScriptException() throw() {}
+	~ScriptException() noexcept override = default;
 };
 
 /// we need to define this constant to make it compile with strict c++98 mode

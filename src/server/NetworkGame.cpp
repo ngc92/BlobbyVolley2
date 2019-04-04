@@ -48,8 +48,8 @@ extern int SWLS_GameSteps;
 
 /* implementation */
 
-NetworkGame::NetworkGame(RakServer& server, boost::shared_ptr<NetworkPlayer> leftPlayer,
-			boost::shared_ptr<NetworkPlayer> rightPlayer, PlayerSide switchedSide,
+NetworkGame::NetworkGame(RakServer& server, const boost::shared_ptr<NetworkPlayer>& leftPlayer,
+			const boost::shared_ptr<NetworkPlayer>& rightPlayer, PlayerSide switchedSide,
 			std::string rules, int scoreToWin, float speed) :
 	mServer(server),
 	mMatch(new DuelMatch(false, rules, scoreToWin)),

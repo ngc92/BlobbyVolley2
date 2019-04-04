@@ -6,7 +6,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/make_shared.hpp>
-
+#include <utility>
 #include "raknet/RakClient.h"
 
 #include "IMGUI.h"
@@ -18,7 +18,7 @@
 
 LobbyState::LobbyState(ServerInfo info, PreviousState previous) :
 		mClient(new RakClient(), [](RakClient* client) { client->Disconnect(25); }),
-		mInfo(info), mPrevious( previous ),
+		mInfo(std::move(std::move(info))), mPrevious( previous ),
 		mLobbyState(ConnectionState::CONNECTING)
 {
 	if (!mClient->Connect(mInfo.hostname, mInfo.port, 0, 0, RAKNET_THREAD_SLEEP_TIME))
@@ -37,16 +37,13 @@ LobbyState::LobbyState(ServerInfo info, PreviousState previous) :
 	{
 		mLocalPlayer = config.loadPlayerIdentity(LEFT_PLAYER, true);
 	}
-	 else
+	else
 	{
 		mLocalPlayer = config.loadPlayerIdentity(RIGHT_PLAYER, true);
 	}
 }
 
-LobbyState::~LobbyState()
-{
-	// disconnect is handled by shared ptr
-}
+LobbyState::~LobbyState() = default;
 
 void LobbyState::step_impl()
 {
@@ -75,7 +72,7 @@ void LobbyState::step_impl()
 			{
 				mLobbyState = ConnectionState::DISCONNECTED;
 				break;
-			};
+			}
 			// we ignore these packets. they tell us about remote connections, which we handle manually with ID_SERVER_STATUS packets.
 			case ID_REMOTE_EXISTING_CONNECTION:
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
@@ -212,7 +209,7 @@ void LobbyState::step_impl()
 		// empty info panel
 		imgui.doOverlay(GEN_ID, Vector2(425.0, 90.0), Vector2(775.0, 470.0));
 	}
-	 else
+	else
 	{
 		std::string description = mInfo.description;
 		for (unsigned int i = 0; i < description.length(); i += 63)
@@ -248,7 +245,7 @@ const char* LobbyState::getStateName() const
 // ----------------------------------------------------------------------------
 LobbyMainSubstate::LobbyMainSubstate(boost::shared_ptr<RakClient> client,
 									unsigned prefspeed, unsigned prefrules, unsigned prefscore ) :
-	mClient(client),
+	mClient(std::move(std::move(client))),
 	mChosenSpeed( prefspeed ),
 	mChosenRules( prefrules ),
 	mChosenScore( prefscore )
@@ -365,8 +362,8 @@ void LobbyMainSubstate::step(const ServerStatusData& status)
 // 			"Host" State Substate
 // -----------------------------------------------------------------------------------------
 
-LobbyGameSubstate::LobbyGameSubstate(boost::shared_ptr<RakClient> client, boost::shared_ptr<GenericIn> in):
-	mClient( client )
+LobbyGameSubstate::LobbyGameSubstate(boost::shared_ptr<RakClient> client, const boost::shared_ptr<GenericIn>& in):
+	mClient(std::move( std::move(client) ))
 {
  	in->uint32( mGameID );
 	PlayerID creator;
@@ -387,7 +384,7 @@ void LobbyGameSubstate::step( const ServerStatusData& status )
 	bool no_players = mOtherPlayers.empty();
 	if(mOtherPlayerNames.empty())
 	{
-		mOtherPlayerNames.push_back(""); // fake entry to prevent crash! not nice!
+		mOtherPlayerNames.emplace_back(""); // fake entry to prevent crash! not nice!
 	}
 
 	bool doEnterGame = false;

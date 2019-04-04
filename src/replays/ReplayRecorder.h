@@ -47,9 +47,9 @@ class FileWrite;
 struct VersionMismatchException : public std::exception, public ObjectCounter<VersionMismatchException>
 {
 	VersionMismatchException(const std::string& filename, uint8_t major, uint8_t minor);
-	~VersionMismatchException() throw();
+	~VersionMismatchException() noexcept override;
 
-	virtual const char* what() const throw();
+	const char* what() const noexcept override;
 
 	std::string error;
 	uint8_t major;
@@ -66,10 +66,10 @@ class ReplayRecorder : public ObjectCounter<ReplayRecorder>
 		ReplayRecorder();
 		~ReplayRecorder();
 
-		void save(boost::shared_ptr<FileWrite> target) const;
+		void save(const boost::shared_ptr<FileWrite>& target) const;
 
-		void send(boost::shared_ptr<GenericOut> stream) const;
-		void receive(boost::shared_ptr<GenericIn>stream);
+		void send(const boost::shared_ptr<GenericOut>& stream) const;
+		void receive(const boost::shared_ptr<GenericIn>&stream);
 
 		// recording functions
 		void record(const DuelMatchState& input);
@@ -81,7 +81,7 @@ class ReplayRecorder : public ObjectCounter<ReplayRecorder>
 		void setPlayerNames(const std::string& left, const std::string& right);
 		void setPlayerColors(Color left, Color right);
 		void setGameSpeed(int fps);
-		void setGameRules( std::string rules );
+		void setGameRules( const std::string& rules );
 
 	private:
 		std::vector<uint8_t> mSaveData;

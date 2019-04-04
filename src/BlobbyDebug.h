@@ -30,8 +30,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 int count(const std::type_info& type);
 int uncount(const std::type_info& type);
-int count(const std::type_info& type, std::string tag, int num);
-int uncount(const std::type_info& type, std::string tag, int num);
+int count(const std::type_info& type, const std::string& tag, int num);
+int uncount(const std::type_info& type, const std::string& tag, int num);
 
 /*! \class ObjectCounter
 	\brief Logging number of creations and living objects
@@ -59,10 +59,7 @@ class ObjectCounter
 			count(typeid(Base));
 		}
 
-		ObjectCounter& operator=(const ObjectCounter& other)
-		{
-			return *this;
-		}
+		ObjectCounter& operator=(const ObjectCounter& other) = default;
 };
 
 
@@ -94,12 +91,10 @@ struct CountingAllocator : private std::allocator<T>
 	typedef ptrdiff_t difference_type ;
 
 	CountingAllocator()
-	{
-
-	}
+	= default;
 
 	template<class V, typename tag2>
-	CountingAllocator(const CountingAllocator<V, tag2>& other)
+	explicit CountingAllocator(const CountingAllocator<V, tag2>& other)
 	{
 	}
 
@@ -111,7 +106,7 @@ struct CountingAllocator : private std::allocator<T>
 
 
 
-	pointer allocate (size_type n, std::allocator<void>::const_pointer hint = 0)
+	pointer allocate (size_type n, std::allocator<void>::const_pointer hint = nullptr)
 	{
 		count(typeid(T), tag_type::tag(), n);
 		return Base::allocate(n, hint);
@@ -131,8 +126,8 @@ struct CountingAllocator : private std::allocator<T>
 
 
 
-int count(const std::type_info& type, std::string tag, void* address, int num);
-int uncount(const std::type_info& type, std::string tag, void* address);
+int count(const std::type_info& type, const std::string& tag, void* address, int num);
+int uncount(const std::type_info& type, const std::string& tag, void* address);
 
 template<class T, typename tag_type>
 struct CountingMalloc
@@ -143,7 +138,7 @@ struct CountingMalloc
 
 	static pointer malloc (size_type n)
 	{
-		pointer nm = static_cast<pointer> ( ::malloc(n) );
+		auto nm = static_cast<pointer> ( ::malloc(n) );
 		count(typeid(T), tag_type::tag(), nm, n);
 		return nm;
 	}
@@ -158,7 +153,7 @@ struct CountingMalloc
 	static pointer realloc ( pointer ptr, size_t size )
 	{
 		uncount(typeid(T), tag_type::tag(), ptr);
-		pointer nm = static_cast<pointer>(::realloc(ptr, size));
+		auto nm = static_cast<pointer>(::realloc(ptr, size));
 		count(typeid(T), tag_type::tag(), nm, size);
 	}
 };
@@ -173,7 +168,7 @@ struct string_tag
 
 typedef std::basic_string< char, std::char_traits<char>, CountingAllocator<char, string_tag> > TrackedString;
 
-void debug_count_execution_fkt(std::string file, int line);
+void debug_count_execution_fkt(const std::string& file, int line);
 
 #define DEBUG_COUNT_EXECUTION debug_count_execution_fkt(__FILE__, __LINE__);
 

@@ -34,8 +34,8 @@ class JoystickPool : public ObjectCounter<JoystickPool>
 
 		SDL_Joystick* getJoystick(int id);
 
-		void openJoystick(const int joyId);
-		void closeJoystick(const int joyId);
+		void openJoystick(int joyId);
+		void closeJoystick(int joyId);
 		void probeJoysticks();
 		void closeJoysticks();
 
@@ -57,9 +57,9 @@ struct JoystickAction : public ObjectCounter<JoystickAction>
 //		TRACKBALL
 	};
 
-	JoystickAction(std::string string);
+	explicit JoystickAction(const std::string& string);
 	JoystickAction(int _joyid, Type _type, int _number)
-		: type(_type), joy(0), joyid(_joyid),
+		: type(_type), joy(nullptr), joyid(_joyid),
 			number(_number) {}
 	~JoystickAction();
 	JoystickAction(const JoystickAction& action);

@@ -29,11 +29,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 class GameState : public State
 {
 public:
-	GameState(DuelMatch* match = nullptr);
-	virtual ~GameState();
+	explicit GameState(DuelMatch* match = nullptr);
+	~GameState() override;
 
 	// step function defines the steps actual work
-	virtual void step_impl() = 0;
+	void step_impl() override = 0;
 
 protected:
 

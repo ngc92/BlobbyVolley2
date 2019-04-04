@@ -1,12 +1,13 @@
 #include "PlayerIdentity.h"
-
-PlayerIdentity::PlayerIdentity(std::string name) : mName(name),
+#include <utility>
+PlayerIdentity::PlayerIdentity(std::string name) : mName(std::move(name)),
 																	mOscillating(false)
 {
 
 }
 
-PlayerIdentity::PlayerIdentity(const std::string& name, Color color, bool osci, PlayerSide side) : mName(name),
+PlayerIdentity::PlayerIdentity(std::string  name, Color color, bool osci, PlayerSide side) :
+																	mName(std::move(name)),
 																	mStaticColor(color),
 																	mOscillating(osci),
 																	mPreferredSide(side)
@@ -14,10 +15,7 @@ PlayerIdentity::PlayerIdentity(const std::string& name, Color color, bool osci, 
 
 }
 
-PlayerIdentity::~PlayerIdentity()
-{
-
-}
+PlayerIdentity::~PlayerIdentity() = default;
 
 const std::string& PlayerIdentity::getName() const
 {

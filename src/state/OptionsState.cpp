@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* includes */
 #include <sstream>
 #include <string>
-
+#include <utility>
 #include "State.h"
 #include "RenderManager.h"
 #include "InputManager.h"
@@ -48,7 +48,7 @@ OptionState::OptionState()
 	mScriptNames = FileSystem::getSingleton().enumerateFiles("scripts", ".lua");
 
 	// hack. we cant use something like push_front, though
-	mScriptNames.push_back("Human");
+	mScriptNames.emplace_back("Human");
 	std::swap(mScriptNames[0], mScriptNames[mScriptNames.size() - 1]);
 
 	for(unsigned int i = 0; i < mScriptNames.size(); ++i)
@@ -73,9 +73,7 @@ OptionState::OptionState()
 	mBotStrength[RIGHT_PLAYER] = mOptionConfig.getInteger("right_script_strength");
 }
 
-OptionState::~OptionState()
-{
-}
+OptionState::~OptionState() = default;
 
 void OptionState::save()
 {
@@ -185,9 +183,7 @@ GraphicOptionsState::GraphicOptionsState()
 	mShowShadow = mOptionConfig.getBool("show_shadow");
 }
 
-GraphicOptionsState::~GraphicOptionsState()
-{
-}
+GraphicOptionsState::~GraphicOptionsState() = default;
 
 void GraphicOptionsState::save()
 {
@@ -423,9 +419,7 @@ InputOptionsState::InputOptionsState()
 	mBlobbyTouchType = mOptionConfig.getInteger("blobby_touch_type");
 }
 
-InputOptionsState::~InputOptionsState()
-{
-}
+InputOptionsState::~InputOptionsState() = default;
 
 void InputOptionsState::save()
 {
@@ -472,10 +466,10 @@ void InputOptionsState::step_impl()
 	handlePlayerInput(RIGHT_PLAYER, lastActionKey, mRightMouseJumpbutton, mRightKeyboard, mRightJoystick);
 
 	//check if a capture window is open, to set all widgets inactive:
-	if (mLeftKeyboard[IA_LEFT] != "" && mLeftKeyboard[IA_RIGHT] != "" && mLeftKeyboard[IA_JUMP] != "" && mLeftJoystick[IA_LEFT] != "" &&
-		 mLeftJoystick[IA_RIGHT] != "" && mLeftJoystick[IA_JUMP] != "" && mLeftMouseJumpbutton != -1 && mRightKeyboard[IA_LEFT] != "" &&
-		 mRightKeyboard[IA_RIGHT] != "" && mRightKeyboard[IA_JUMP] != "" && mRightJoystick[IA_LEFT] != "" && mRightJoystick[IA_RIGHT] != "" &&
-		 mRightJoystick[IA_JUMP] != "" && mRightMouseJumpbutton != -1)
+	if (!mLeftKeyboard[IA_LEFT].empty() && !mLeftKeyboard[IA_RIGHT].empty() && !mLeftKeyboard[IA_JUMP].empty() && !mLeftJoystick[IA_LEFT].empty() &&
+		 !mLeftJoystick[IA_RIGHT].empty() && !mLeftJoystick[IA_JUMP].empty() && mLeftMouseJumpbutton != -1 && !mRightKeyboard[IA_LEFT].empty() &&
+		 !mRightKeyboard[IA_RIGHT].empty() && !mRightKeyboard[IA_JUMP].empty() && !mRightJoystick[IA_LEFT].empty() && !mRightJoystick[IA_RIGHT].empty() &&
+		 !mRightJoystick[IA_JUMP].empty() && mRightMouseJumpbutton != -1)
 	{
 		imgui.doCursor(true);
 		imgui.doInactiveMode(false);
@@ -586,7 +580,7 @@ void InputOptionsState::handleKeyboardInput(int base_x, std::string& lastActionK
 	if (mSetKeyboard == base_x + 1)
 		mSetKeyboard = base_x + 2;
 
-	if (mSetKeyboard == base_x + 2 && input[IA_LEFT] != "")
+	if (mSetKeyboard == base_x + 2 && !input[IA_LEFT].empty())
 		mSetKeyboard = base_x + 3;
 
 	imgui.doText(GEN_ID, Vector2(base_x + 34.0, 190.0), TextManager::OP_RIGHT_KEY);
@@ -600,7 +594,7 @@ void InputOptionsState::handleKeyboardInput(int base_x, std::string& lastActionK
 	if (mSetKeyboard == base_x + 3)
 		mSetKeyboard = base_x + 4;
 
-	if (mSetKeyboard == base_x + 4 && input[IA_RIGHT] != "")
+	if (mSetKeyboard == base_x + 4 && !input[IA_RIGHT].empty())
 		mSetKeyboard = base_x + 5;
 
 	imgui.doText(GEN_ID, Vector2(base_x + 34.0, 260.0), TextManager::OP_JUMP_KEY );
@@ -614,7 +608,7 @@ void InputOptionsState::handleKeyboardInput(int base_x, std::string& lastActionK
 	if (mSetKeyboard == base_x + 5)
 		mSetKeyboard = base_x + 6;
 
-	if (mSetKeyboard == base_x + 6 && input[IA_JUMP] != "")
+	if (mSetKeyboard == base_x + 6 && !input[IA_JUMP].empty())
 		mSetKeyboard = 0;
 }
 
@@ -688,11 +682,11 @@ void InputOptionsState::getMouseInput(int& action, TextManager::STRING input)
 void InputOptionsState::getKeyboardInput(std::string& action, TextManager::STRING input, std::string lastActionKey)
 {
 	// if already set, do nothing
-	if (action != "")
+	if (!action.empty())
 		return;
 
 	getInputPrompt(TextManager::OP_PRESS_KEY_FOR, input);
-	action = lastActionKey;
+	action = std::move(lastActionKey);
 	if (InputManager::getSingleton()->exit())
 		action = mOldString;
 }
@@ -700,7 +694,7 @@ void InputOptionsState::getKeyboardInput(std::string& action, TextManager::STRIN
 void InputOptionsState::getJoystickInput(std::string& action, TextManager::STRING input)
 {
 	// if already set, do nothing
-	if (action != "")
+	if (!action.empty())
 		return;
 
 	getInputPrompt(TextManager::OP_PRESS_BUTTON_FOR, input);
@@ -827,9 +821,7 @@ MiscOptionsState::MiscOptionsState()
 	mLanguage = mOptionConfig.getString("language");
 }
 
-MiscOptionsState::~MiscOptionsState()
-{
-}
+MiscOptionsState::~MiscOptionsState() = default;
 
 void MiscOptionsState::save()
 {
@@ -944,7 +936,7 @@ void MiscOptionsState::step_impl()
 	imgui.doText(GEN_ID, Vector2(660.0, 330.0), FPSInPercent.str());
 
 	//! \todo this must be reworked
-	std::map<std::string, std::string>::iterator olang = TextManager::language_names.find(TextManager::getSingleton()->getLang());
+	auto olang = TextManager::language_names.find(TextManager::getSingleton()->getLang());
 	if(++olang == TextManager::language_names.end()){
 		olang = TextManager::language_names.begin();
 	}

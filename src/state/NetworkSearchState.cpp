@@ -71,13 +71,12 @@ NetworkSearchState::NetworkSearchState() :
 NetworkSearchState::~NetworkSearchState()
 {
 	// Disconnect from servers
-	for (ClientList::iterator iter = mQueryClients.begin();
-		iter != mQueryClients.end(); ++iter)
+	for (auto & mQueryClient : mQueryClients)
 	{
-		if (*iter)
+		if (mQueryClient)
 		{
-			(*iter)->Disconnect(50);
-			delete *iter;
+			mQueryClient->Disconnect(50);
+			delete mQueryClient;
 		}
 	}
 	// request ping thread to stop
@@ -99,7 +98,7 @@ void NetworkSearchState::step_impl()
 	// set to true to initiate server connection
 	bool doEnterServer = false;
 
-	for (ClientList::iterator iter = mQueryClients.begin();
+	for (auto iter = mQueryClients.begin();
 		iter != mQueryClients.end(); ++iter)
 	{
 		bool skip = false;
@@ -146,14 +145,14 @@ void NetworkSearchState::step_impl()
 								doEnterServer = true;
 							}
 						}
-						 else
+						else
 						{
 							std::cout << "duplicate server entry\n";
 							std::cout << info << "\n";
 						}
 
 					}
-					 else
+					else
 					{
 						std::cout << " server invalid " << packet->length << " " << ServerInfo::BLOBBY_SERVER_PRESENT_PACKET_SIZE << "\n";
 					}
@@ -223,7 +222,7 @@ void NetworkSearchState::step_impl()
 			{
 				std::string hostname = mPingClient->PlayerIDToDottedIP(packet->playerId);
 				printf("got ping response by \"%s:%d\", trying to connect\n", hostname.c_str(), packet->playerId.port);
-				RakClient* newClient = new RakClient;
+				auto* newClient = new RakClient;
 				newClient->Connect(
 					hostname.c_str(), packet->playerId.port, 0, 0, RAKNET_THREAD_SLEEP_TIME);
 				mQueryClients.push_back(newClient);
@@ -258,9 +257,9 @@ void NetworkSearchState::step_impl()
 	}
 
 	std::vector<std::string> servernames;
-	for (unsigned int i = 0; i < mScannedServers.size(); i++)
+	for (auto & mScannedServer : mScannedServers)
 	{
-		servernames.push_back(std::string(mScannedServers[i].name) + " (" + boost::lexical_cast<std::string>(mScannedServers[i].waitingplayers) + ")" );
+		servernames.push_back(std::string(mScannedServer.name) + " (" + boost::lexical_cast<std::string>(mScannedServer.waitingplayers) + ")" );
 	}
 
 	if( imgui.doSelectbox(GEN_ID, Vector2(25.0, 60.0), Vector2(775.0, 470.0), servernames, mSelectedServer) == SBA_DBL_CLICK )
@@ -294,7 +293,7 @@ void NetworkSearchState::step_impl()
 				{
 					port = boost::lexical_cast<int>(mEnteredServer.substr(found+1));
 				}
-				catch (boost::bad_lexical_cast)
+				catch (const boost::bad_lexical_cast&)
 				{
 					/// \todo inform the user that default port was selected
 
@@ -360,7 +359,7 @@ void NetworkSearchState::step_impl()
 			PlayerSide localSide = (PlayerSide)config.getInteger("network_side");
 
 			PlayerIdentity local_player = config.loadPlayerIdentity(localSide, true);
-			ServerInfo info( local_player.getName().c_str());
+			ServerInfo info( local_player.getName() );
 			std::vector<std::string> rule_vec{config.getString("rules")};
 
 
@@ -393,7 +392,7 @@ void NetworkSearchState::step_impl()
 		config.loadFile("config.xml");
 
 		PlayerIdentity local_player = config.loadPlayerIdentity((PlayerSide)config.getInteger("network_side"), true);
-		mHostedServer.reset(new ServerInfo( local_player.getName().c_str()));
+		mHostedServer.reset(new ServerInfo( local_player.getName()));
 		std::strncpy(mHostedServer->hostname,
 					mPingClient->PlayerIDToDottedIP(mPingClient->GetInternalID()),
 					sizeof(mHostedServer->hostname));
@@ -464,20 +463,20 @@ void OnlineSearchState::doSearchServers()
 
 		TiXmlElement* onlineserverElem = serverListXml->FirstChildElement("onlineserver");
 
-		if (onlineserverElem == NULL)
+		if (onlineserverElem == nullptr)
 		{
 			std::cout << "Can't read onlineserver.xml" << std::endl;
 			return;
 		}
 
 		for (TiXmlElement* serverElem = onlineserverElem->FirstChildElement("server");
-		     serverElem != NULL;
+		     serverElem != nullptr;
 		     serverElem = serverElem->NextSiblingElement("server"))
 		{
 			std::string host;
 			int port;
 			for (TiXmlElement* varElem = serverElem->FirstChildElement("var");
-			     varElem != NULL;
+			     varElem != nullptr;
 			     varElem = varElem->NextSiblingElement("var"))
 			{
 				const char* tmp;
@@ -495,7 +494,7 @@ void OnlineSearchState::doSearchServers()
 					{
 						port = boost::lexical_cast<int>(tmp);
 					}
-					catch (boost::bad_lexical_cast)
+					catch (const boost::bad_lexical_cast&)
 					{
 						port = BLOBBY_PORT;
 					}
@@ -526,7 +525,7 @@ void OnlineSearchState::doSearchServers()
 		{
 			port = boost::lexical_cast<int>(address.substr(found+1));
 		}
-		 catch (boost::bad_lexical_cast)
+		 catch (const boost::bad_lexical_cast&)
 		{
 			/// \todo inform the user that default port was selected
 		}

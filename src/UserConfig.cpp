@@ -42,19 +42,19 @@ std::map<std::string, boost::shared_ptr<IUserConfigReader> >& userConfigCache()
 {
      static std::map<std::string, boost::shared_ptr<IUserConfigReader> > cache;
      return cache;
-};
+}
 
 boost::shared_ptr<IUserConfigReader> IUserConfigReader::createUserConfigReader(const std::string& file)
 {
 	// if we have this userconfig already cached, just return from cache
-	std::map<std::string, boost::shared_ptr<IUserConfigReader> >:: iterator cfg_cached = userConfigCache().find(file);
+	auto cfg_cached = userConfigCache().find(file);
 	if( cfg_cached != userConfigCache().end() )
 	{
 		return cfg_cached->second;
 	}
 
 	// otherwise, load user config...
-	UserConfig* uc = new UserConfig();
+	auto* uc = new UserConfig();
 	uc->loadFile(file);
 	boost::shared_ptr<IUserConfigReader> config(uc);
 
@@ -67,7 +67,7 @@ boost::shared_ptr<IUserConfigReader> IUserConfigReader::createUserConfigReader(c
 PlayerIdentity UserConfig::loadPlayerIdentity(PlayerSide side, bool force_human)
 {
 	std::string prefix = side == LEFT_PLAYER ? "left" : "right";
-	std::string name = "";
+	std::string name;
 	// init local input
 	if(force_human)
 	{
@@ -106,10 +106,10 @@ bool UserConfig::loadFile(const std::string& filename)
 
 	TiXmlElement* userConfigElem =
 		configDoc->FirstChildElement("userconfig");
-	if (userConfigElem == NULL)
+	if (userConfigElem == nullptr)
 		return false;
 	for (TiXmlElement* varElem = userConfigElem->FirstChildElement("var");
-		varElem != NULL;
+		varElem != nullptr;
 		varElem = varElem->NextSiblingElement("var"))
 	{
 		std::string name, value;
@@ -137,12 +137,12 @@ bool UserConfig::saveFile(const std::string& filename) const
 
 	file.write(xmlHeader);
 
-	for (unsigned int i = 0; i < mVars.size(); ++i)
+	for (auto mVar : mVars)
 	{
 		char writeBuffer[256];
 		int charsWritten = snprintf(writeBuffer, 256,
 			"\t<var name=\"%s\" value=\"%s\"/>\n",
-			mVars[i]->Name.c_str(), mVars[i]->Value.c_str());
+			mVar->Name.c_str(), mVar->Value.c_str());
 
 		file.write(writeBuffer, charsWritten);
 	}
@@ -182,7 +182,7 @@ bool UserConfig::getBool(const std::string& name, bool default_value) const
 {
 	auto var = checkVarByName(name);
 	if (var)
-		return (var->Value == "true") ? true : false;;
+		return (var->Value == "true") ? true : false;
 
 	return default_value;
 }
@@ -222,8 +222,8 @@ void UserConfig::setInteger(const std::string& name, int var)
 
 UserConfigVar* UserConfig::createVar(const std::string& name, const std::string& value)
 {
-	if (findVarByName(name)) return NULL;
-	UserConfigVar *var = new UserConfigVar;
+	if (findVarByName(name)) return nullptr;
+	auto *var = new UserConfigVar;
 	var->Name = name;
 	var->Value = value;
 	mVars.push_back(var);
@@ -249,8 +249,8 @@ void UserConfig::setValue(const std::string& name, const std::string& value)
 
 UserConfig::~UserConfig()
 {
-	for (unsigned int i = 0; i < mVars.size(); ++i)
-		delete mVars[i];
+	for (auto & mVar : mVars)
+		delete mVar;
 }
 
 UserConfigVar* UserConfig::checkVarByName(const std::string& name) const
@@ -266,8 +266,8 @@ UserConfigVar* UserConfig::checkVarByName(const std::string& name) const
 
 UserConfigVar* UserConfig::findVarByName(const std::string& name) const
 {
-	for (unsigned int i = 0; i < mVars.size(); ++i)
-		if (mVars[i]->Name == name) return mVars[i];
+	for (auto mVar : mVars)
+		if (mVar->Name == name) return mVar;
 
 	return nullptr;
 }

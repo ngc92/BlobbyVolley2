@@ -69,12 +69,12 @@ class ReplayLoader_V2X: public IReplayLoader
 	public:
 		ReplayLoader_V2X() = default;
 
-		virtual ~ReplayLoader_V2X() { };
+		~ReplayLoader_V2X() override = default;
 
-		virtual int getVersionMajor() const { return 2; };
-		virtual int getVersionMinor() const { return 0; };
+		int getVersionMajor() const override { return 2; };
+		int getVersionMinor() const override { return 0; };
 
-		virtual std::string getPlayerName(PlayerSide player) const
+		std::string getPlayerName(PlayerSide player) const override
 		{
 			if(player == LEFT_PLAYER)
 				return mLeftPlayerName;
@@ -84,7 +84,7 @@ class ReplayLoader_V2X: public IReplayLoader
 			assert(0);
 		}
 
-		virtual Color getBlobColor(PlayerSide player) const
+		Color getBlobColor(PlayerSide player) const override
 		{
 			if(player == LEFT_PLAYER)
 				return mLeftColor;
@@ -95,7 +95,7 @@ class ReplayLoader_V2X: public IReplayLoader
 		}
 
 
-		virtual int getFinalScore(PlayerSide player) const
+		int getFinalScore(PlayerSide player) const override
 		{
 			if(player == LEFT_PLAYER)
 				return mLeftFinalScore;
@@ -105,33 +105,33 @@ class ReplayLoader_V2X: public IReplayLoader
 			assert(0);
 		}
 
-		virtual int getSpeed() const
+		int getSpeed() const override
 		{
 			return mGameSpeed;
 		};
 
-		virtual int getDuration() const
+		int getDuration() const override
 		{
 			return mGameDuration;
 		};
 
-		virtual int getLength()  const
+		int getLength()  const override
 		{
 			return mGameLength;
 		};
 
-		virtual std::time_t getDate() const
+		std::time_t getDate() const override
 		{
 			return mGameDate;
 		};
 
-		virtual std::string getRules() const
+		std::string getRules() const override
 		{
 			return mRules;
 		}
 
 
-		virtual void getInputAt(int step, InputSource* left, InputSource* right)
+		void getInputAt(int step, InputSource* left, InputSource* right) override
 		{
 			assert( step  < mGameLength );
 
@@ -147,7 +147,7 @@ class ReplayLoader_V2X: public IReplayLoader
 			right->setInput(PlayerInput((bool)(packet & 4), (bool)(packet & 2), (bool)(packet & 1)));
 		}
 
-		virtual bool isSavePoint(int position, int& save_position) const
+		bool isSavePoint(int position, int& save_position) const override
 		{
 			int foundPos;
 			save_position = getSavePoint(position, foundPos);
@@ -158,7 +158,7 @@ class ReplayLoader_V2X: public IReplayLoader
 		// 		so we can start from it when calling
 		// 		getSavePoint in a row (without "jumping").
 		// 		we can save this parameter in ReplayPlayer
-		virtual int getSavePoint(int targetPosition, int& savepoint) const
+		int getSavePoint(int targetPosition, int& savepoint) const override
 		{
 			// desired index can't be lower that this value,
 			// cause additional savepoints could shift it only right
@@ -193,7 +193,7 @@ class ReplayLoader_V2X: public IReplayLoader
 			return index;
 		}
 
-		virtual void readSavePoint(int index, ReplaySavePoint& state) const
+		void readSavePoint(int index, ReplaySavePoint& state) const override
 		{
 			state = mSavePoints.at(index);
 		}

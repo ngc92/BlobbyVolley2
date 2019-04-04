@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <iostream>
 #include <fstream>
 #include <boost/lexical_cast.hpp>
+#include <utility>
 
 std::map<std::string, CountingReport>& GetCounterMap()
 {
@@ -64,7 +65,7 @@ int getObjectCount(const std::type_info& type)
 	return 	GetCounterMap()[type.name()].alive;
 }
 
-int count(const std::type_info& type, std::string tag, int n)
+int count(const std::type_info& type, const std::string& tag, int n)
 {
 	std::string name = std::string(type.name()) + " - " + tag;
 	if(GetCounterMap().find(name) == GetCounterMap().end() )
@@ -75,12 +76,12 @@ int count(const std::type_info& type, std::string tag, int n)
 	return GetCounterMap()[name].alive += n;
 }
 
-int uncount(const std::type_info& type, std::string tag, int n)
+int uncount(const std::type_info& type, const std::string& tag, int n)
 {
 	return GetCounterMap()[std::string(type.name()) + " - " + tag].alive -= n;
 }
 
-int count(const std::type_info& type, std::string tag, void* address, int num)
+int count(const std::type_info& type, const std::string& tag, void* address, int num)
 {
 	std::cout << "MALLOC " << num << "\n";
 	count(type, tag, num);
@@ -88,7 +89,7 @@ int count(const std::type_info& type, std::string tag, void* address, int num)
 	return 0;
 }
 
-int uncount(const std::type_info& type, std::string tag, void* address)
+int uncount(const std::type_info& type, const std::string& tag, void* address)
 {
 	int num = GetAddressMap()[address];
 	std::cout << "FREE " << num << "\n";
@@ -96,7 +97,7 @@ int uncount(const std::type_info& type, std::string tag, void* address)
 	return 0;
 }
 
-void debug_count_execution_fkt(std::string file, int line)
+void debug_count_execution_fkt(const std::string& file, int line)
 {
 	std::string rec = file + ":" + boost::lexical_cast<std::string>(line);
 	if(GetProfMap().find(rec) == GetProfMap().end() )
@@ -112,19 +113,19 @@ void report(std::ostream& stream)
 {
 	stream << "MEMORY REPORT\n";
 	int sum = 0;
-	for(std::map<std::string, CountingReport>::iterator i = GetCounterMap().begin(); i != GetCounterMap().end(); ++i)
+	for(auto & i : GetCounterMap())
 	{
-		stream << i->first << "\n- - - - - - - - - -\n";
-		stream << " alive:   " << i->second.alive << "\n";
-		stream << " created: " << i->second.created << "\n\n";
-		sum += i->second.alive;
+		stream << i.first << "\n- - - - - - - - - -\n";
+		stream << " alive:   " << i.second.alive << "\n";
+		stream << " created: " << i.second.created << "\n\n";
+		sum += i.second.alive;
 	}
 
 	stream << "\n\nPROFILE REPORT\n";
-	for(std::map<std::string, int>::iterator i = GetProfMap().begin(); i != GetProfMap().end(); ++i)
+	for(auto & i : GetProfMap())
 	{
-		stream << i->first << ": ";
-		stream << i->second << "\n";
+		stream << i.first << ": ";
+		stream << i.second << "\n";
 	}
 
 

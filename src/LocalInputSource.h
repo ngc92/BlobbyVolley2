@@ -28,10 +28,10 @@ class InputDevice;
 class LocalInputSource : public InputSource
 {
 	public:
-		LocalInputSource(PlayerSide player);
-		~LocalInputSource();
+		explicit LocalInputSource(PlayerSide player);
+		~LocalInputSource() override;
 
-		virtual PlayerInputAbs getNextInput();
+		PlayerInputAbs getNextInput() override;
 
 	private:
 		InputDevice* mInputDevice;

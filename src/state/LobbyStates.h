@@ -58,10 +58,10 @@ class LobbyState : public State
 {
 	public:
 		LobbyState(ServerInfo info, PreviousState previous);
-		virtual ~LobbyState();
+		~LobbyState() override;
 
-		virtual void step_impl();
-		virtual const char* getStateName() const;
+		void step_impl() override;
+		const char* getStateName() const override;
 
 	private:
 		boost::shared_ptr<RakClient> mClient;
@@ -85,7 +85,7 @@ class LobbyMainSubstate : public LobbySubstate
 {
 public:
 	LobbyMainSubstate(boost::shared_ptr<RakClient> client, unsigned speed, unsigned rules, unsigned score);
-	virtual void step( const ServerStatusData& status );
+	void step( const ServerStatusData& status ) override;
 private:
 	boost::shared_ptr<RakClient> mClient;
 
@@ -103,9 +103,9 @@ private:
 class LobbyGameSubstate : public LobbySubstate
 {
 public:
-	LobbyGameSubstate(boost::shared_ptr<RakClient> client, boost::shared_ptr<GenericIn>);
+	LobbyGameSubstate(boost::shared_ptr<RakClient> client, const boost::shared_ptr<GenericIn>&);
 
-	virtual void step( const ServerStatusData& status );
+	void step( const ServerStatusData& status ) override;
 private:
 	boost::shared_ptr<RakClient> mClient;
 

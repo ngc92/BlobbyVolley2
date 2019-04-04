@@ -27,9 +27,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 class PlayerIdentity
 {
 	public:
-		PlayerIdentity() {};
-		PlayerIdentity(std::string name);
-		PlayerIdentity(const std::string& name, Color color, bool osci, PlayerSide pref);
+		PlayerIdentity() = default;;
+		explicit PlayerIdentity(std::string name);
+		PlayerIdentity(std::string name, Color color, bool osci, PlayerSide pref);
 		~PlayerIdentity();
 
 		const std::string& getName() const;

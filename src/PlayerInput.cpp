@@ -127,7 +127,7 @@ void PlayerInputAbs::swapSides()
 PlayerInput PlayerInputAbs::toPlayerInput( const DuelMatch* match ) const
 {
 	if( mFlags & F_RELATIVE)
-		return PlayerInput( mFlags & F_LEFT, mFlags & F_RIGHT, mFlags & F_JUMP );
+		return { mFlags & F_LEFT, mFlags & F_RIGHT, mFlags & F_JUMP };
 	else
 	{
 		bool left = false;
@@ -144,7 +144,7 @@ PlayerInput PlayerInputAbs::toPlayerInput( const DuelMatch* match ) const
 			right = true;
 		else if (std::abs(blobpos - BLOBBY_SPEED - mTarget) < distance)
 			left = true;
-		return PlayerInput( left, right, mFlags & F_JUMP );
+		return { left, right, mFlags & F_JUMP };
 	}
 
 }

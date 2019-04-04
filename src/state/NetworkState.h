@@ -48,9 +48,9 @@ public:
 	/// \param client A client which has an established connection to the server we want to start the game on.
 	NetworkGameState(boost::shared_ptr<RakClient> client, int rule_checksum, int score_to_win);
 
-	virtual ~NetworkGameState();
-	virtual void step_impl();
-	virtual const char* getStateName() const;
+	~NetworkGameState() override;
+	void step_impl() override;
+	const char* getStateName() const override;
 
 private:
 	enum

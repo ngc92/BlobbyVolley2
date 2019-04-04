@@ -33,11 +33,11 @@ class LocalGameState : public GameState
 {
 	public:
 		LocalGameState();
-		virtual ~LocalGameState();
+		~LocalGameState() override;
 
 		// implementation of the State Interface
-		virtual void step_impl();
-		virtual const char* getStateName() const;
+		void step_impl() override;
+		const char* getStateName() const override;
 
 	private:
 		bool mWinner;

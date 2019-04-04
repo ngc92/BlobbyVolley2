@@ -65,7 +65,7 @@ class PlayerInputAbs
 {
 	public:
 		PlayerInputAbs();
-		PlayerInputAbs(RakNet::BitStream& stream);
+		explicit PlayerInputAbs(RakNet::BitStream& stream);
 		PlayerInputAbs(bool l, bool r, bool j);
 
 

@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <typeinfo>
 #include <string>
 #include <cstdlib>
+#include <utility>
 
 namespace BlobNet
 {
@@ -39,15 +40,13 @@ namespace Layer
 {
 
 /* implementation */
-Http::Http(const std::string& hostname, const int& port)
-: mHostname(hostname)
+Http::Http(std::string hostname, const int& port)
+: mHostname(std::move(hostname))
 , mPort(port)
 {
 }
 
-Http::~Http()
-{
-}
+Http::~Http() = default;
 
 
 void Http::request(const std::string& path, std::stringstream& response)
@@ -70,7 +69,7 @@ void Http::request(const std::string& path, std::stringstream& response)
 	{
 
 		BOOST_THROW_EXCEPTION ( Exception::HttpException("Can't connect to host.") );
-	};
+	}
 
 	// Message for a simple request
 	std::string request = "GET /" + path + " HTTP/1.1\r\nHost: " + mHostname + "\r\n\r\n";

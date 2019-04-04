@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "NetworkPlayer.h"
 
 /* includes */
+#include <utility>
 
 /* implementation */
 
@@ -55,7 +56,7 @@ NetworkPlayer::NetworkPlayer(PlayerID id, RakNet::BitStream stream) : mID(id)
 	int color;
 	stream.Read(color);
 
-	mIdentity = PlayerIdentity(charName, color, false, (PlayerSide)playerSide);
+	mIdentity = PlayerIdentity(charName, Color(color), false, (PlayerSide)playerSide);
 }
 
 bool NetworkPlayer::valid() const
@@ -94,5 +95,5 @@ const boost::shared_ptr<NetworkGame>& NetworkPlayer::getGame() const
 
 void NetworkPlayer::setGame(boost::shared_ptr<NetworkGame> game)
 {
-	mGame = game;
+	mGame = std::move(game);
 }

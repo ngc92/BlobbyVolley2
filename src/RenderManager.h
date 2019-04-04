@@ -101,7 +101,7 @@ struct BufferedImage : public ObjectCounter<BufferedImage>
 class RenderManager : public ObjectCounter<RenderManager>
 {
 	public:
-		virtual ~RenderManager(){};
+		virtual ~RenderManager()= default;
 
 		static RenderManager* createRenderManagerSDL();
 		//static RenderManager* createRenderManagerGP2X();
@@ -192,7 +192,7 @@ class RenderManager : public ObjectCounter<RenderManager>
 		// Returns index for ? on unknown char
 		int getNextFontIndex(std::string::const_iterator& iter);
 		SDL_Surface* highlightSurface(SDL_Surface* surface, int luminance);
-		SDL_Surface* loadSurface(std::string filename);
+		SDL_Surface* loadSurface(const std::string& filename);
 		SDL_Surface* createEmptySurface(unsigned int width, unsigned int height);
 
 		SDL_Window* mWindow;

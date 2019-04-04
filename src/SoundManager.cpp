@@ -58,7 +58,7 @@ Sound* SoundManager::loadSound(const std::string& filename)
 		newSoundSpec.format == mAudioSpec.format &&
 		newSoundSpec.channels == mAudioSpec.channels)
 	{
-		Sound *newSound = new Sound;
+		auto *newSound = new Sound;
 		newSound->data = new Uint8[newSoundLength];
 		memcpy(newSound->data, newSoundBuffer, newSoundLength);
 		newSound->length = newSoundLength;
@@ -82,7 +82,7 @@ Sound* SoundManager::loadSound(const std::string& filename)
 			BOOST_THROW_EXCEPTION ( FileLoadException(filename) );
 		SDL_FreeWAV(newSoundBuffer);
 
-		Sound *newSound = new Sound;
+		auto *newSound = new Sound;
 		newSound->data = conversionStructure.buf;
 		newSound->length = Uint32(conversionStructure.len_cvt);
 		newSound->position = 0;
@@ -132,7 +132,7 @@ bool SoundManager::init()
 	desiredSpec.callback = playCallback;
 	desiredSpec.userdata = mSingleton;
 
-	mAudioDevice = SDL_OpenAudioDevice(NULL, 0, &desiredSpec, &mAudioSpec, SDL_AUDIO_ALLOW_FORMAT_CHANGE);
+	mAudioDevice = SDL_OpenAudioDevice(nullptr, 0, &desiredSpec, &mAudioSpec, SDL_AUDIO_ALLOW_FORMAT_CHANGE);
 
 	if (desiredSpec.format != mAudioSpec.format)
 	{
@@ -183,16 +183,12 @@ void SoundManager::playCallback(void* singleton, Uint8* stream, int length)
 
 void SoundManager::deinit()
 {
-	for (std::map<std::string, Sound*>::iterator iter = mSound.begin();
-			iter != mSound.end(); ++iter)
+	for (auto & iter : mSound)
 	{
-		if (iter->second)
+		if (iter.second)
 		{
-			if (iter->second->data != 0)
-			{
-				delete[] iter->second->data;
-			}
-			delete iter->second;
+		    delete[] iter.second->data;
+			delete iter.second;
 		}
 	}
 	SDL_UnlockAudioDevice(mAudioDevice);

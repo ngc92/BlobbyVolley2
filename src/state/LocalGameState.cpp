@@ -37,9 +37,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "InputSourceFactory.h"
 
 /* implementation */
-LocalGameState::~LocalGameState()
-{
-}
+LocalGameState::~LocalGameState() = default;
 
 LocalGameState::LocalGameState()
 	: mWinner(false), mRecorder(new ReplayRecorder())
@@ -73,7 +71,7 @@ LocalGameState::LocalGameState()
 void LocalGameState::step_impl()
 {
 	IMGUI& imgui = IMGUI::getSingleton();
-	if(mErrorMessage != "")
+	if(!mErrorMessage.empty())
 	{
 		displayErrorMessageBox();
 	}
@@ -81,7 +79,7 @@ void LocalGameState::step_impl()
 	{
 		if ( displaySaveReplayPrompt() )
 		{
-			saveReplay( *mRecorder.get() );
+			saveReplay( *mRecorder );
 		}
 	}
 	else if (mMatch->isPaused())

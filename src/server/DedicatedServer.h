@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma once
 
 #include <string>
+#include <vector>
 #include <map>
 #include <list>
 #include <mutex>
@@ -52,7 +53,7 @@ class DedicatedServer
 		/// simulatanious connections
 		/// \todo Maybe two classes for server info: local server info for a server, and remote for data sent to client
 		/// \param is_local: Set to true, to indicate a locally hosted server intended for a single game.
-		DedicatedServer(const ServerInfo& info, const std::vector<std::string>& rulefile,
+		DedicatedServer(ServerInfo info, const std::vector<std::string>& rulefile,
 						const std::vector<float>& speeds, int max_clients, bool is_local = false);
 		~DedicatedServer();
 

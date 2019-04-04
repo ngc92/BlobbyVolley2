@@ -34,23 +34,23 @@ class RenderManagerGP2X : public RenderManager
 	public:
 		RenderManagerGP2X();
 
-		virtual void init(int xResolution, int yResolution, bool fullscreen);
-		virtual void deinit();
-		virtual void draw();
-		virtual void refresh();
+		void init(int xResolution, int yResolution, bool fullscreen) override;
+		void deinit() override;
+		void draw() override;
+		void refresh() override;
 
-		virtual bool setBackground(const std::string& filename);
-		virtual void setBlobColor(int player, Color color);
+		bool setBackground(const std::string& filename) override;
+		void setBlobColor(int player, Color color) override;
 
-		virtual void setBall(const Vector2& position, float rotation);
-		virtual void setBlob(int player, const Vector2& position,
-				float animationState);
+		void setBall(const Vector2& position, float rotation) override;
+		void setBlob(int player, const Vector2& position,
+				float animationState) override;
 
 		virtual void setScore(int leftScore, int rightScore,
 				   bool leftWarning, bool rightWarning);
 		virtual void setTime(const std::string& t);
 
-		virtual void drawText(const std::string& text, Vector2 position, unsigned int flags = TF_NORMAL);
+		void drawText(const std::string& text, Vector2 position, unsigned int flags = TF_NORMAL) override;
 		virtual void drawImage(const std::string& filename, Vector2 position) {};
 
 	private:

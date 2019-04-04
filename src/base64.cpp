@@ -38,7 +38,7 @@ template< std::size_t N >
 constexpr std::size_t length( char const (&)[N] )
 {
 	return N-1;
-};
+}
 
 // checks whether a given character belongs to a valid base64 block
 constexpr bool is_valid( char c )
@@ -53,7 +53,7 @@ constexpr uint8_t find_in_table(uint8_t entry)
 	return is_valid(entry) ? translation_table[N] == entry ? N : find_in_table<N-1>(entry) : -1;
 }
 template<>
-constexpr uint8_t find_in_table<0>(uint8_t entry) { return 0; };
+constexpr uint8_t find_in_table<0>(uint8_t entry) { return 0; }
 
 template<uint8_t...Is>
 struct index_seq
@@ -104,7 +104,7 @@ constexpr uint8_t decode( uint8_t byte )
 }
 
 // the bitmask for slicing the three bytes into subelements
-constexpr std::uint64_t bitmask = (1 << 6) - 1;
+constexpr std::uint64_t bitmask = (1u << 6) - 1;
 
 static_assert( length(translation_table) == 64, "error: need 64 characters in the translation table" );
 
@@ -115,10 +115,10 @@ static_assert( length(translation_table) == 64, "error: need 64 characters in th
 // simple encoding function for 3 bytes
 void encode( const std::uint8_t*& byte_array, std::string::iterator& writer )
 {
-	const uint64_t* bits = reinterpret_cast<const uint64_t*>(byte_array);
+	const auto* bits = reinterpret_cast<const uint64_t*>(byte_array);
 	for(int i = 0; i < 4; ++i)
 	{
-		unsigned index = bitmask & (*bits >> (6*i));
+		unsigned index = bitmask & (*bits >> (6u*i));
 		assert(index < 64);
 		*writer = translation_table[index];
 		++writer;
@@ -158,7 +158,7 @@ std::string encode( const char* begin, const char* end, int newlines)
 	if(extra)
 	{
 		uint64_t copy = 0;
-		uint8_t* bits = reinterpret_cast<uint8_t*>(&copy);
+		auto* bits = reinterpret_cast<uint8_t*>(&copy);
 		for(unsigned i = 0; i < tail; ++i)
 			bits[i] = *(read++);
 
@@ -174,13 +174,13 @@ std::string encode( const char* begin, const char* end, int newlines)
 
 void decode( std::uint8_t*& byte_array, std::string::const_iterator& reader )
 {
-	uint64_t* bits = reinterpret_cast<uint64_t*>(byte_array);
-	*bits &= 0;
+	auto* bits = reinterpret_cast<uint64_t*>(byte_array);
+	*bits &= 0u;
 	for(int i = 0; i < 4; ++i)
 	{
 		uint8_t value = decode(*(reader++));
 		assert( (value & (~bitmask)) == 0 ); // check that it is valid
-		*bits |= value << (6*i);
+		*bits |= value << (6u*i);
 	}
 	std::advance(byte_array, 3);
 }

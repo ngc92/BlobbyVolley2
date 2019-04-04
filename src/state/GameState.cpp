@@ -63,7 +63,7 @@ void GameState::presentGame()
 	{
 		rmanager.setBlobColor(LEFT_PLAYER, rmanager.getOscillationColor());
 	}
-	 else
+	else
 	{
 		rmanager.setBlobColor(LEFT_PLAYER, mMatch->getPlayer(LEFT_PLAYER).getStaticColor());
 	}
@@ -72,7 +72,7 @@ void GameState::presentGame()
 	{
 		rmanager.setBlobColor(RIGHT_PLAYER, rmanager.getOscillationColor());
 	}
-	 else
+	else
 	{
 		rmanager.setBlobColor(RIGHT_PLAYER, mMatch->getPlayer(RIGHT_PLAYER).getStaticColor());
 	}
@@ -127,7 +127,7 @@ bool GameState::displaySaveReplayPrompt()
 
 	if(imgui.doButton(GEN_ID, Vector2(220, 330), TextManager::LBL_OK))
 	{
-		if(mFilename != "")
+		if(!mFilename.empty())
 		{
 			imgui.resetSelection();
 			doSave = true;
@@ -194,7 +194,7 @@ void GameState::saveReplay(ReplayRecorder& recorder)
 {
 	try
 	{
-		if (mFilename != "")
+		if (!mFilename.empty())
 		{
 			std::string repFileName = std::string("replays/") + mFilename + std::string(".bvr");
 

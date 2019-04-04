@@ -153,8 +153,8 @@ void RenderManagerGP2X::deinit()
 {
 	SDL_FreeSurface(mBackground);
 	SDL_FreeSurface(mBallShadow);
-	for (unsigned int i = 0; i < mBall.size(); ++i)
-		SDL_FreeSurface(mBall[i]);
+	for (auto & i : mBall)
+		SDL_FreeSurface(i);
 	for (unsigned int i = 0; i < mStandardBlob.size(); ++i)
 	{
 		SDL_FreeSurface(mStandardBlob[i]);
@@ -278,8 +278,8 @@ bool RenderManagerGP2X::setBackground(const std::string& filename)
 
 void RenderManagerGP2X::setBlobColor(int player, Color color)
 {
-	std::vector<SDL_Surface*> *handledBlob = 0;
-	std::vector<SDL_Surface*> *handledBlobShadow = 0;
+	std::vector<SDL_Surface*> *handledBlob = nullptr;
+	std::vector<SDL_Surface*> *handledBlobShadow = nullptr;
 
 	if (player == LEFT_PLAYER)
 	{

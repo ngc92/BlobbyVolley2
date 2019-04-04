@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "LocalInputSource.h"
 #include "ScriptedInputSource.h"
 
-boost::shared_ptr<InputSource> InputSourceFactory::createInputSource( boost::shared_ptr<IUserConfigReader> config, PlayerSide side )
+boost::shared_ptr<InputSource> InputSourceFactory::createInputSource( const boost::shared_ptr<IUserConfigReader>& config, PlayerSide side )
 {
 	std::string prefix = side == LEFT_PLAYER ? "left" : "right";
 	try

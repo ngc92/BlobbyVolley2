@@ -30,5 +30,5 @@ class InputSource;
 class InputSourceFactory
 {
 	public:
-		static boost::shared_ptr<InputSource> createInputSource( boost::shared_ptr<IUserConfigReader> config, PlayerSide pls );
+		static boost::shared_ptr<InputSource> createInputSource( const boost::shared_ptr<IUserConfigReader>& config, PlayerSide pls );
 };

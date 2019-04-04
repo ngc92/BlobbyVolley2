@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "FileRead.h"
 
 /* implementation */
-RenderManager* RenderManager::mSingleton = 0;
+RenderManager* RenderManager::mSingleton = nullptr;
 
 RenderManager::RenderManager() : mDrawGame(false)
 {
@@ -45,7 +45,7 @@ SDL_Surface* RenderManager::highlightSurface(SDL_Surface* surface, int luminance
 {
 	SDL_Surface *newSurface = createEmptySurface(surface->w, surface->h);
 	SDL_SetColorKey(surface, SDL_FALSE, 0);
-	SDL_BlitSurface(surface, 0, newSurface, 0);
+	SDL_BlitSurface(surface, nullptr, newSurface, nullptr);
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(newSurface->format, 0, 0, 0));
 
 	Uint8 alpha;
@@ -80,7 +80,7 @@ SDL_Surface* RenderManager::highlightSurface(SDL_Surface* surface, int luminance
 	return newSurface;
 }
 
-SDL_Surface* RenderManager::loadSurface(std::string filename)
+SDL_Surface* RenderManager::loadSurface(const std::string& filename)
 {
 	FileRead file(filename);
 	int fileLength = file.length();
@@ -260,9 +260,8 @@ Color RenderManager::getOscillationColor() const
 {
 	float time = float(SDL_GetTicks()) / 1000.0;
 
-	return Color(
-					int((std::sin(time*1.5) + 1.0) * 128),
-					int((std::sin(time*2.5) + 1.0) * 128),
-					int((std::sin(time*3.5) + 1.0) * 128)
-				);
+	return {
+	    int((std::sin(time*1.5) + 1.0) * 128),
+	    int((std::sin(time*2.5) + 1.0) * 128),
+	    int((std::sin(time*3.5) + 1.0) * 128)};
 }

@@ -42,7 +42,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if LOGGER_MODE == LOGGER_CONSOLE
 #include <iostream>
-#include <time.h>
+#include <ctime>
 
 #define LOG(class, message) \
 	{ \

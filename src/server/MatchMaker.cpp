@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <iostream>
 #include <algorithm>
 #include <cassert>
-
+#include <utility>
 #include "GenericIO.h"
 #include "NetworkMessage.h"
 #include "NetworkGame.h"
@@ -66,9 +66,9 @@ unsigned MatchMaker::addGame( OpenGame game )
 	while(mOpenGames.find(mIDCounter) != mOpenGames.end())
 	{
 		++mIDCounter;
-	};
+	}
 
-	mOpenGames[mIDCounter] = game;
+	mOpenGames[mIDCounter] = std::move(game);
 
 	// broadcast presence of new game
 	for( auto& player : mPlayerMap )
@@ -157,7 +157,7 @@ void MatchMaker::removePlayerFromGame( unsigned game, PlayerID player )
 void MatchMaker::addPlayer( PlayerID id, boost::shared_ptr<NetworkPlayer> player )
 {
 	assert( mPlayerMap.find(id) == mPlayerMap.end() );
-	mPlayerMap[id] = player;
+	mPlayerMap[id] = std::move(player);
 
 	// greet the player with the list of all games
 	sendOpenGameList( id );
@@ -265,7 +265,7 @@ void MatchMaker::receiveLobbyPacket( PlayerID player, RakNet::BitStream stream )
 	auto reader = createGenericReader(&stream);
 	reader->byte(byte);
 	reader->byte(byte);
-	LobbyPacketType type = LobbyPacketType(byte);
+	auto type = LobbyPacketType(byte);
 
 	if( type == LobbyPacketType::OPEN_GAME )
 	{
@@ -375,7 +375,7 @@ void MatchMaker::broadcastOpenGameStatus( unsigned gameID )
 	{
 		auto player = mPlayerMap.find(pid);
 		if( player == mPlayerMap.end() )
-			plnames.push_back("INVALID!");
+			plnames.emplace_back("INVALID!");
 		else
 		{
 			plnames.push_back( player->second->getName() );
