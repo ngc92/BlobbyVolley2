@@ -112,7 +112,7 @@ void ReplayState::step_impl()
 		if(mReplayPlayer->gotoPlayingPosition(mPositionJump, mMatch.get()))
 			mPositionJump = -1;
 	}
-	 else if(!mPaused)
+	else if(!mPaused)
 	{
 		while( mSpeedTimer >= 8)
 		{

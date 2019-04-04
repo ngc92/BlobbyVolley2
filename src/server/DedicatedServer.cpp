@@ -358,8 +358,8 @@ void DedicatedServer::processBlobbyServerPresent( const packet_ptr& packet)
 	{
 		std::cerr << "outdated client tried to connect! Unable to determine client version due to packet size mismatch : " << stream.GetNumberOfBitsUsed() << "\n" ;
 		stream2.Write((unsigned char)ID_VERSION_MISMATCH);
-		stream2.Write((int)BLOBBY_VERSION_MAJOR);
-		stream2.Write((int)BLOBBY_VERSION_MINOR);
+		stream2.Write(BLOBBY_VERSION_MAJOR);
+		stream2.Write(BLOBBY_VERSION_MINOR);
 		mServer->Send(&stream2, LOW_PRIORITY, RELIABLE_ORDERED, 0, packet->playerId, false);
 	}
 	else if (major < BLOBBY_VERSION_MAJOR
@@ -367,8 +367,8 @@ void DedicatedServer::processBlobbyServerPresent( const packet_ptr& packet)
 	// Check if the packet contains matching version numbers
 	{
 		stream2.Write((unsigned char)ID_VERSION_MISMATCH);
-		stream2.Write((int)BLOBBY_VERSION_MAJOR);
-		stream2.Write((int)BLOBBY_VERSION_MINOR);
+		stream2.Write(BLOBBY_VERSION_MAJOR);
+		stream2.Write(BLOBBY_VERSION_MINOR);
 		mServer->Send(&stream2, LOW_PRIORITY, RELIABLE_ORDERED, 0, packet->playerId, false);
 	}
 	else

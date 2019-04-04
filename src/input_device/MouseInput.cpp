@@ -77,18 +77,15 @@ InputDevice* createMouseInput(PlayerSide player, int jumpbutton, float s)
 MouseInputDevice::MouseInputDevice(PlayerSide player, int jumpbutton, float sensitivity)
 	: InputDevice(), mPlayer(player), mJumpButton(jumpbutton), mMarkerX(0), mSensitivity( sensitivity )
 {
-	if (SDL_GetMouseState(nullptr, nullptr))
-		mDelay = true;
-	else
-		mDelay = false;
+    mDelay = SDL_GetMouseState(nullptr, nullptr) != 0;
 
-	assert(InputManager::getSingleton()->isMouseCaptured() == false);
+	assert(!InputManager::getSingleton()->isMouseCaptured());
 	InputManager::getSingleton()->captureMouse( true );
 }
 
 MouseInputDevice::~MouseInputDevice()
 {
-	assert(InputManager::getSingleton()->isMouseCaptured() == true);
+	assert(InputManager::getSingleton()->isMouseCaptured());
 	InputManager::getSingleton()->captureMouse( false );
 }
 

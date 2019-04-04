@@ -148,8 +148,7 @@ namespace ADT {
 
 	template <class QueueType> bool Queue<QueueType>::find(QueueType q)
 	{
-		typename ContainerType::iterator it;
-		it = std::find(this->array.begin(), this->array.end(), q);
+		auto it = std::find(this->array.begin(), this->array.end(), q);
 
 		return it != this->array.end();
 	}

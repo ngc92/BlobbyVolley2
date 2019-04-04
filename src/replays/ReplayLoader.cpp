@@ -140,11 +140,11 @@ class ReplayLoader_V2X: public IReplayLoader
 
 			// each packet has size 1 byte for now
 			// so we find step at mReplayOffset + step
-			char packet = mBuffer[mReplayOffset + step];
+			unsigned char packet = mBuffer[mReplayOffset + step];
 
 			// now read the packet data
-			left->setInput(PlayerInput((bool)(packet & 32), (bool)(packet & 16), (bool)(packet & 8)));
-			right->setInput(PlayerInput((bool)(packet & 4), (bool)(packet & 2), (bool)(packet & 1)));
+			left->setInput(PlayerInput((bool)(packet & 32u), (bool)(packet & 16u), (bool)(packet & 8u)));
+			right->setInput(PlayerInput((bool)(packet & 4u), (bool)(packet & 2u), (bool)(packet & 1u)));
 		}
 
 		bool isSavePoint(int position, int& save_position) const override

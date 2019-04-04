@@ -93,7 +93,7 @@ NetworkGameState::NetworkGameState( boost::shared_ptr<RakClient> client, int rul
 		mRemotePlayer = &mMatch->getPlayer( RIGHT_PLAYER );
 		mMatch->setPlayers( localplayer, remoteplayer );
 	}
-	 else
+	else
 	{
 		PlayerIdentity localplayer = config->loadPlayerIdentity(RIGHT_PLAYER, true);
 		PlayerIdentity remoteplayer = config->loadPlayerIdentity(LEFT_PLAYER, true);

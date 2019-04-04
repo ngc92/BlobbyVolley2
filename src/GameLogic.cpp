@@ -501,7 +501,6 @@ LuaGameLogic::~LuaGameLogic() = default;
 
 PlayerSide LuaGameLogic::checkWin() const
 {
-	bool won = false;
 	if (!getLuaFunction("IsWinning"))
 	{
 		return FallbackGameLogic::checkWin();
@@ -515,7 +514,7 @@ PlayerSide LuaGameLogic::checkWin() const
 		std::cerr << std::endl;
 	}
 
-	won = lua_toboolean(mState, -1);
+    bool won = lua_toboolean(mState, -1);
 	lua_pop(mState, 1);
 
 	if(won)

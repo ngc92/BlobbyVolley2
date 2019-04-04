@@ -278,7 +278,6 @@ int simulate_steps( lua_State* state )
 	float vy = lua_tonumber( state, 5);
 	lua_pop( state, 5);
 
-	Vector2 v{vx, -vy};
 	world->setBallPosition( Vector2{x, 600 - y} );
 	world->setBallVelocity( Vector2{vx, -vy});
 	for(int i = 0; i < steps; ++i)
@@ -315,7 +314,6 @@ int simulate_until(lua_State* state)
 	const bool init = ival < coordinate;
 
 	// setup the world
-	Vector2 v{vx, -vy};
 	world->setBallPosition( Vector2{x, 600 - y} );
 	world->setBallVelocity( Vector2{vx, -vy});
 
@@ -327,8 +325,8 @@ int simulate_until(lua_State* state)
 		world->step(PlayerInput(), PlayerInput(), false, true);
 		// check for the condition
 		auto pos = world->getBallPosition();
-		float v = axis == "x" ? pos.x : 600 - pos.y;
-		if( (v < coordinate) != init )
+		float u = axis == "x" ? pos.x : 600 - pos.y;
+		if( (u < coordinate) != init )
 			break;
 	}
 	// indicate failure

@@ -51,7 +51,7 @@ enum class PreviousState
 class LobbySubstate
 {
 public:
-	void virtual step(const ServerStatusData& status ) = 0;
+    virtual void step(const ServerStatusData& status ) = 0;
 };
 
 class LobbyState : public State

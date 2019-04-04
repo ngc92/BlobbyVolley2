@@ -104,7 +104,7 @@ void* File::getPHYSFS_file()
 
 bool File::is_open() const
 {
-	return mHandle;
+	return static_cast<bool>(mHandle);
 }
 
 uint32_t File::length() const

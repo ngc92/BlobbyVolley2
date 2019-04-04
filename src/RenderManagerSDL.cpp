@@ -486,7 +486,7 @@ bool RenderManagerSDL::setBackground(const std::string& filename)
 		mBackground = newImage->sdlImage;
 		mImageMap["background"] = newImage;
 	}
-	catch (FileLoadException)
+	catch (const FileLoadException&)
 	{
 		return false;
 	}
@@ -506,10 +506,11 @@ void RenderManagerSDL::setBlobColor(int player, Color color)
 	if (player == LEFT_PLAYER)
 	{
 		handledBlobBlood = &mLeftBlobBlood;
-	}
-	if (player == RIGHT_PLAYER)
+	} else if (player == RIGHT_PLAYER)
 	{
 		handledBlobBlood = &mRightBlobBlood;
+	} else {
+	    assert(false);
 	}
 
 	SDL_Surface* tempSurface = colorSurface(mStandardBlobBlood, mBlobColor[player]);
@@ -529,12 +530,13 @@ void RenderManagerSDL::colorizeBlobs(int player)
 		handledBlob = &mLeftBlob;
 		handledBlobShadow = &mLeftBlobShadow;
 		frame = mLeftBlobAnimationState;
-	}
-	if (player == RIGHT_PLAYER)
+	} else if (player == RIGHT_PLAYER)
 	{
 		handledBlob = &mRightBlob;
 		handledBlobShadow = &mRightBlobShadow;
 		frame = mRightBlobAnimationState;
+	} else {
+	    assert(false);
 	}
 
 	if( (*handledBlob)[frame].mColor != mBlobColor[player])
@@ -669,8 +671,8 @@ void RenderManagerSDL::drawImage(const std::string& filename, Vector2 position, 
 	{
 		// Scaling
 		const SDL_Rect blitRect = {
-			(short)lround(position.x - float(size.x) / 2.0),
-			(short)lround(position.y - float(size.y) / 2.0),
+			(short)lround(position.x - size.x / 2.0),
+			(short)lround(position.y - size.y / 2.0),
 			(short)size.x,
 			(short)size.y
 		};
@@ -709,8 +711,8 @@ void RenderManagerSDL::drawBlob(const Vector2& pos, const Color& col)
 
 
 	//  Second dirty workaround in the function to have the right position of blobs in the GUI
-	position.x = position.x - (int)(75/2);
-	position.y = position.y - (int)(89/2);
+	position.x = position.x - 75 / 2;
+	position.y = position.y - 89 / 2;
 
 	if(toDraw == 1)
 	{

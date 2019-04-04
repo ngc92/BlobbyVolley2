@@ -56,8 +56,6 @@ SDL_Surface* RenderManagerGP2X::colorSurface(SDL_Surface *surface, Color color)
 		pixel->r = rr < 255 ? rr : 255;
 		pixel->g = rg < 255 ? rg : 255;
 		pixel->b = rb < 255 ? rb : 255;
-
-
 	}
 	SDL_UnlockSurface(newSurface);
 	SDL_Surface *convSurface = SDL_DisplayFormat(newSurface);
@@ -269,7 +267,7 @@ bool RenderManagerGP2X::setBackground(const std::string& filename)
 		mBackground = SDL_DisplayFormat(tempBackground);
 		SDL_FreeSurface(tempBackground);
 	}
-	catch (FileLoadException)
+	catch (const FileLoadException&)
 	{
 		return false;
 	}
@@ -285,11 +283,12 @@ void RenderManagerGP2X::setBlobColor(int player, Color color)
 	{
 		handledBlob = &mLeftBlob;
 		handledBlobShadow = &mLeftBlobShadow;
-	}
-	if (player == RIGHT_PLAYER)
+	} else if (player == RIGHT_PLAYER)
 	{
 		handledBlob = &mRightBlob;
 		handledBlobShadow = &mRightBlobShadow;
+	} else {
+	    assert(false);
 	}
 
 	for (int i = 0; i < 5; ++i)

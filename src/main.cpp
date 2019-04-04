@@ -259,15 +259,9 @@ void setupPHYSFS()
 #endif
 
 		// fullscreen?
-		if(gameConfig.getString("fullscreen") == "true")
-			rmanager->init(BASE_RESOLUTION_X, BASE_RESOLUTION_Y, true);
-		else
-			rmanager->init(BASE_RESOLUTION_X, BASE_RESOLUTION_Y, false);
+        rmanager->init(BASE_RESOLUTION_X, BASE_RESOLUTION_Y, gameConfig.getString("fullscreen") == "true");
 
-		if(gameConfig.getString("show_shadow") == "true")
-			rmanager->showShadow(true);
-		else
-			rmanager->showShadow(false);
+        rmanager->showShadow(gameConfig.getString("show_shadow") == "true");
 
 		SpeedController scontroller(gameConfig.getFloat("gamefps"));
 		SpeedController::setMainInstance(&scontroller);

@@ -35,9 +35,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* PlayerInput */
 void PlayerInput::setAll( unsigned char all )
 {
-	left = all & 4;
-	right = all & 2;
-	up =  all & 1;
+	left = all & 4u;
+	right = all & 2u;
+	up =  all & 1u;
 }
 
 bool PlayerInput::operator==(const PlayerInput& other) const

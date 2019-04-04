@@ -182,7 +182,7 @@ bool UserConfig::getBool(const std::string& name, bool default_value) const
 {
 	auto var = checkVarByName(name);
 	if (var)
-		return (var->Value == "true") ? true : false;
+		return var->Value == "true";
 
 	return default_value;
 }

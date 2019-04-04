@@ -95,11 +95,7 @@ void SpeedController::update()
 	// if passed time > time when we should have drawn next frame
 	// maybe we should limit the number of consecutive framedrops?
 	// for now: we can't do a framedrop if we did a framedrop last frame
-	if ( delta * PRECISION_FACTOR > rateTicks * (mCounter + 1) && !mFramedrop)
-	{
-		mFramedrop = true;
-	} else
-		mFramedrop = false;
+    mFramedrop = delta * PRECISION_FACTOR > rateTicks * (mCounter + 1) && !mFramedrop;
 
 	mCounter++;
 

@@ -91,7 +91,7 @@ char FileRead::readByte()
 	check_file_open();
 
 	char ret;
-	readRawBytes(reinterpret_cast<char*>(&ret), sizeof(ret));
+	readRawBytes(&ret, sizeof(ret));
 
 	return ret;
 }
