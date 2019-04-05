@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <set>
 #include <utility>
 
-#include "tinyxml/tinyxml.h"
+#include "tinyxml.h"
 
 #include "Global.h"
 #include "FileRead.h"

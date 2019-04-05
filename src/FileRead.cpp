@@ -30,14 +30,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <boost/scoped_array.hpp>
 #include <boost/algorithm/string.hpp>
 #include <memory>
-#include "tinyxml/tinyxml.h"
 
-extern "C"
-{
-#include "lua/lua.h"
-#include "lua/lauxlib.h"
-#include "lua/lualib.h"
-}
+#include "tinyxml.h"
+#include "lua.hpp"
 
 #include "Global.h"
 

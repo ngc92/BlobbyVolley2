@@ -38,7 +38,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "blobnet/layer/Http.hpp"
 #include "blobnet/exception/HttpException.hpp"
 
-#include "tinyxml/tinyxml.h"
+#include "tinyxml.h"
 
 #include "NetworkState.h"
 #include "LobbyStates.h"

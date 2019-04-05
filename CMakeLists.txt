@@ -9,6 +9,7 @@ configure_file(${Blobby_SOURCE_DIR}/config.h.in
                ${Blobby_BINARY_DIR}/config.h)
 include_directories(${Blobby_BINARY_DIR})
 
+add_subdirectory(deps)
 add_subdirectory(data)
 add_subdirectory(src)
 

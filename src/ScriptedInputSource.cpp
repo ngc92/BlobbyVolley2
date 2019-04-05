@@ -29,13 +29,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <boost/throw_exception.hpp>
 
 #include <SDL2/SDL.h>
-
-extern "C"
-{
-#include "lua/lua.h"
-#include "lua/lauxlib.h"
-#include "lua/lualib.h"
-}
+#include "lua.hpp"
 
 #include "DuelMatch.h"
 #include "IUserConfigReader.h"

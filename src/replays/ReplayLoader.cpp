@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <boost/make_shared.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include "tinyxml/tinyxml.h"
+#include "tinyxml.h"
 
 #include "raknet/BitStream.h"
 

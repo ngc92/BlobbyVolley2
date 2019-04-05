@@ -1,5 +1,3 @@
-add_subdirectory(lua)
-add_subdirectory(tinyxml)
 add_subdirectory(raknet)
 add_subdirectory(blobnet)
 
@@ -98,8 +96,8 @@ else (CMAKE_SYSTEM_NAME STREQUAL Windows)
 endif (CMAKE_SYSTEM_NAME STREQUAL Windows)
 
 add_executable(blobby ${blobby_SRC})
-target_link_libraries(blobby PRIVATE tinyxml Boost::boost)
-target_link_libraries(blobby PRIVATE lua raknet blobnet ${RAKNET_LIBRARIES} ${PHYSFS_LIBRARY} ${OPENGL_LIBRARIES}
+target_link_libraries(blobby PRIVATE lua tinyxml Boost::boost)
+target_link_libraries(blobby PRIVATE raknet blobnet ${RAKNET_LIBRARIES} ${PHYSFS_LIBRARY} ${OPENGL_LIBRARIES}
 		${SDL2_LIBRARIES} pthread)
 
 if (UNIX)
