@@ -38,13 +38,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
 /* implementation */
-std::map<std::string, boost::shared_ptr<IUserConfigReader> >& userConfigCache()
+std::map<std::string, std::shared_ptr<IUserConfigReader> >& userConfigCache()
 {
-     static std::map<std::string, boost::shared_ptr<IUserConfigReader> > cache;
+     static std::map<std::string, std::shared_ptr<IUserConfigReader> > cache;
      return cache;
 }
 
-boost::shared_ptr<IUserConfigReader> IUserConfigReader::createUserConfigReader(const std::string& file)
+std::shared_ptr<IUserConfigReader> IUserConfigReader::createUserConfigReader(const std::string& file)
 {
 	// if we have this userconfig already cached, just return from cache
 	auto cfg_cached = userConfigCache().find(file);
@@ -56,7 +56,7 @@ boost::shared_ptr<IUserConfigReader> IUserConfigReader::createUserConfigReader(c
 	// otherwise, load user config...
 	auto* uc = new UserConfig();
 	uc->loadFile(file);
-	boost::shared_ptr<IUserConfigReader> config(uc);
+	std::shared_ptr<IUserConfigReader> config(uc);
 
 	// ... and add to cache
 	userConfigCache()[file] = config;
@@ -96,7 +96,7 @@ PlayerIdentity UserConfig::loadPlayerIdentity(PlayerSide side, bool force_human)
 
 bool UserConfig::loadFile(const std::string& filename)
 {
-	boost::shared_ptr<TiXmlDocument> configDoc = FileRead::readXMLDocument(filename);
+	std::shared_ptr<TiXmlDocument> configDoc = FileRead::readXMLDocument(filename);
 
 	if (configDoc->Error())
 	{

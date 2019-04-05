@@ -25,8 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "PlayerIdentity.h"
 
 #include <vector>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class RakClient;
 class RakServer;
@@ -46,7 +45,7 @@ class NetworkGameState : public GameState
 public:
 	/// create a NetworkGameState with connection to a certain server
 	/// \param client A client which has an established connection to the server we want to start the game on.
-	NetworkGameState(boost::shared_ptr<RakClient> client, int rule_checksum, int score_to_win);
+	NetworkGameState(std::shared_ptr<RakClient> client, int rule_checksum, int score_to_win);
 
 	~NetworkGameState() override;
 	void step_impl() override;
@@ -70,11 +69,11 @@ private:
 
 	bool mUseRemoteColor;
 
-	boost::scoped_ptr<InputSource> mLocalInput;
+	std::unique_ptr<InputSource> mLocalInput;
 
 	bool mWaitingForReplay;
 
-	boost::shared_ptr<RakClient> mClient;
+	std::shared_ptr<RakClient> mClient;
 	PlayerSide mOwnSide;
 	PlayerSide mWinningPlayer;
 

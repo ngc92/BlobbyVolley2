@@ -1,5 +1,3 @@
-add_definitions(-DTIXML_USE_STL)
-
 set(tinyxml_SRC
 	tinystr.cpp tinystr.h
 	tinyxml.cpp tinyxml.h
@@ -8,3 +6,4 @@ set(tinyxml_SRC
 	)
 
 add_library(tinyxml STATIC ${tinyxml_SRC})
+target_compile_definitions(tinyxml PUBLIC TIXML_USE_STL)

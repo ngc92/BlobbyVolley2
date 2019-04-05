@@ -26,6 +26,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <algorithm>
 #include <iostream>
 
+#include <boost/throw_exception.hpp>
+
 #include <SDL2/SDL.h>
 
 extern "C"
@@ -130,7 +132,7 @@ PlayerInputAbs ScriptedInputSource::getNextInput()
 	}
 
 	if (mStartTime + WAITING_TIME > SDL_GetTicks() && serving)
-		return PlayerInputAbs();
+		return {};
 
 	// random jump delay depending on difficulty
 	if( wantjump && !mLastJump )

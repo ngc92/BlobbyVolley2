@@ -1,7 +1,7 @@
 #ifndef LOBBYSTATES_H_INCLUDED
 #define LOBBYSTATES_H_INCLUDED
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 #include "NetworkMessage.h"
 #include "PlayerIdentity.h"
@@ -64,7 +64,7 @@ class LobbyState : public State
 		const char* getStateName() const override;
 
 	private:
-		boost::shared_ptr<RakClient> mClient;
+		std::shared_ptr<RakClient> mClient;
 		PlayerIdentity mLocalPlayer;
 		ServerInfo mInfo;
 		PreviousState mPrevious;
@@ -72,7 +72,7 @@ class LobbyState : public State
 		ConnectionState mLobbyState;
 
 		ServerStatusData mStatus;
-		boost::shared_ptr<LobbySubstate> mSubState;
+		std::shared_ptr<LobbySubstate> mSubState;
 
 		// indices of settings that resemble most closely those of local settings
 		unsigned mPreferedSpeed = -1;
@@ -84,10 +84,10 @@ class LobbyState : public State
 class LobbyMainSubstate : public LobbySubstate
 {
 public:
-	LobbyMainSubstate(boost::shared_ptr<RakClient> client, unsigned speed, unsigned rules, unsigned score);
+	LobbyMainSubstate(std::shared_ptr<RakClient> client, unsigned speed, unsigned rules, unsigned score);
 	void step( const ServerStatusData& status ) override;
 private:
-	boost::shared_ptr<RakClient> mClient;
+	std::shared_ptr<RakClient> mClient;
 
 	unsigned int mSelectedGame = 0;
 
@@ -103,11 +103,11 @@ private:
 class LobbyGameSubstate : public LobbySubstate
 {
 public:
-	LobbyGameSubstate(boost::shared_ptr<RakClient> client, const boost::shared_ptr<GenericIn>&);
+	LobbyGameSubstate(std::shared_ptr<RakClient> client, const std::shared_ptr<GenericIn>&);
 
 	void step( const ServerStatusData& status ) override;
 private:
-	boost::shared_ptr<RakClient> mClient;
+	std::shared_ptr<RakClient> mClient;
 
 	unsigned mGameID = 0;
 	std::string mGameName = "";

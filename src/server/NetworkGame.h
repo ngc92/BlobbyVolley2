@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <mutex>
 #include <thread>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/shared_array.hpp>
 
 #include "Global.h"
@@ -51,8 +50,8 @@ class NetworkGame : public ObjectCounter<NetworkGame>
 		// decides which player is switched.
 		/// \exception Throws FileLoadException, if the desired rules file could not be loaded
 		///	\exception Throws std::runtime_error, if \p leftPlayer or \p rightPlayer are already assigned to a game.
-		NetworkGame(RakServer& server, const boost::shared_ptr<NetworkPlayer>& leftPlayer,
-					const boost::shared_ptr<NetworkPlayer>& rightPlayer, PlayerSide switchedSide,
+		NetworkGame(RakServer& server, const std::shared_ptr<NetworkPlayer>& leftPlayer,
+					const std::shared_ptr<NetworkPlayer>& rightPlayer, PlayerSide switchedSide,
 					std::string rules, int scoreToWin, float speed);
 
 		~NetworkGame();
@@ -93,15 +92,15 @@ class NetworkGame : public ObjectCounter<NetworkGame>
 		PacketQueue mPacketQueue;
 		std::mutex mPacketQueueMutex;
 
-		boost::scoped_ptr<DuelMatch> mMatch;
+		std::unique_ptr<DuelMatch> mMatch;
 		SpeedController mSpeedController;
-		boost::shared_ptr<InputSource> mLeftInput;
-		boost::shared_ptr<InputSource> mRightInput;
+		std::shared_ptr<InputSource> mLeftInput;
+		std::shared_ptr<InputSource> mRightInput;
 		unsigned mLeftLastTime = -1;
 		unsigned mRightLastTime = -1;
 		std::thread mGameThread;
 
-		boost::scoped_ptr<ReplayRecorder> mRecorder;
+		std::unique_ptr<ReplayRecorder> mRecorder;
 
 		bool mGameValid;
 

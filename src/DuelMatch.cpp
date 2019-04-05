@@ -44,7 +44,7 @@ DuelMatch::DuelMatch(bool remote, const std::string& rules, int score_to_win) :
 {
 	mPhysicWorld.reset( new PhysicWorld() );
 
-	setInputSources(boost::make_shared<InputSource>(), boost::make_shared<InputSource>());
+	setInputSources(std::make_shared<InputSource>(), std::make_shared<InputSource>());
 
 	if(!mRemote)
 		mPhysicWorld->setEventCallback( [this]( const MatchEvent& event ) { mEvents.push_back(event); } );
@@ -56,7 +56,7 @@ void DuelMatch::setPlayers( const PlayerIdentity& lplayer, const PlayerIdentity&
 	mPlayers[RIGHT_PLAYER] = rplayer;
 }
 
-void DuelMatch::setInputSources(const boost::shared_ptr<InputSource>& linput, const boost::shared_ptr<InputSource>& rinput )
+void DuelMatch::setInputSources(const std::shared_ptr<InputSource>& linput, const std::shared_ptr<InputSource>& rinput )
 {
 	if(linput)
 		mInputSources[LEFT_PLAYER] = linput;
@@ -299,7 +299,7 @@ Clock& DuelMatch::getClock()
 	return mLogic->getClock();
 }
 
-boost::shared_ptr<InputSource> DuelMatch::getInputSource(PlayerSide player) const
+std::shared_ptr<InputSource> DuelMatch::getInputSource(PlayerSide player) const
 {
 	return mInputSources[player];
 }

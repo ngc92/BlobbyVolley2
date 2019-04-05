@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma once
 
 #include "Global.h"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class DuelMatch;
 class ReplayRecorder;
@@ -57,7 +57,7 @@ public:
 	static void deinit();
 
 	/// gets the currently active state
-	static boost::scoped_ptr<State>& getCurrentState();
+	static std::unique_ptr<State>& getCurrentState();
 	/// gets the name of the currently active state
 	static const char* getCurrenStateName();
 
@@ -68,8 +68,8 @@ protected:
 	static void switchState(State* newState);
 
 private:
-	static boost::scoped_ptr<State> mCurrentState;
-	static boost::scoped_ptr<State> mStateToSwitchTo;
+	static std::unique_ptr<State> mCurrentState;
+	static std::unique_ptr<State> mStateToSwitchTo;
 
 };
 

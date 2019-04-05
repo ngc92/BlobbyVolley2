@@ -20,8 +20,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #pragma once
 
-#include <boost/scoped_ptr.hpp>
-
 #include "GameState.h"
 #include "Vector.h"
 
@@ -41,7 +39,7 @@ public:
 	void loadReplay(const std::string& replay);
 
 private:
-	boost::scoped_ptr<ReplayPlayer> mReplayPlayer;
+	std::unique_ptr<ReplayPlayer> mReplayPlayer;
 
 	//bool mChecksumError;
 	//bool mVersionError;

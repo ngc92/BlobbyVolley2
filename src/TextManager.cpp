@@ -86,7 +86,7 @@ std::string TextManager::getLang() const{
 /// \todo why no const std::string& ?
 bool TextManager::loadFromXML(const std::string& filename){
 	// read and parse file
-	boost::shared_ptr<TiXmlDocument> language_data = FileRead::readXMLDocument(filename);
+	std::shared_ptr<TiXmlDocument> language_data = FileRead::readXMLDocument(filename);
 
 	if (language_data->Error())
 	{

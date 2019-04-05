@@ -27,7 +27,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <list>
 #include <future>
 #include <atomic>
-#include <boost/scoped_ptr.hpp>
 
 class RakClient;
 class RakServer;
@@ -55,7 +54,7 @@ public:
 	const char* getStateName() const override;
 protected:
 	std::vector<ServerInfo> mScannedServers;
-	boost::scoped_ptr<RakClient> mPingClient;
+	std::unique_ptr<RakClient> mPingClient;
 	// set this to true to step pinging before we are finished
 	std::atomic<bool> mCancelPing;
 
@@ -74,7 +73,7 @@ private:
 	bool mEnteringServer;
 	bool mDisplayUpdateNotification;
 
-	boost::scoped_ptr<ServerInfo> mHostedServer;
+	std::unique_ptr<ServerInfo> mHostedServer;
 
 	std::string mEnteredServer;
 	unsigned mServerBoxPosition;

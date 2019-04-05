@@ -27,7 +27,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <mutex>
 #include <deque>
 #include <iosfwd>
-#include <boost/scoped_ptr.hpp>
 
 #include "NetworkPlayer.h"
 #include "NetworkMessage.h"
@@ -83,7 +82,7 @@ class DedicatedServer
 		void processBlobbyServerPresent( const packet_ptr& packet );
 		// creates a new game with those players
 		// does not add the game to the active game list
-		void createGame(boost::shared_ptr<NetworkPlayer> left, boost::shared_ptr<NetworkPlayer> right,
+		void createGame(std::shared_ptr<NetworkPlayer> left, std::shared_ptr<NetworkPlayer> right,
 						PlayerSide switchSide, std::string rules, int scoreToWin, float gamespeed);
 		// broadcasts the current server  status to all waiting clients
 
@@ -92,7 +91,7 @@ class DedicatedServer
 		/// \todo is this already counted by raknet?
 		unsigned int mConnectedClients;
 		// raknet server used
-		boost::scoped_ptr<RakServer> mServer;
+		std::unique_ptr<RakServer> mServer;
 
 		// true, if new players should be accepted
 		bool mAcceptNewPlayers;
@@ -102,8 +101,8 @@ class DedicatedServer
 		ServerInfo mServerInfo;
 
 		// containers for all games and mapping players to their games
-		std::list< boost::shared_ptr<NetworkGame> > mGameList;
-		std::map< PlayerID, boost::shared_ptr<NetworkPlayer>> mPlayerMap;
+		std::list< std::shared_ptr<NetworkGame> > mGameList;
+		std::map< PlayerID, std::shared_ptr<NetworkPlayer>> mPlayerMap;
 		std::mutex mPlayerMapMutex;
 
 		// packet queue

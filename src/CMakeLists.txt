@@ -1,11 +1,9 @@
 add_subdirectory(lua)
 add_subdirectory(tinyxml)
-ADD_DEFINITIONS(-std=c++11)
 add_subdirectory(raknet)
 add_subdirectory(blobnet)
 
-add_definitions(-DTIXML_USE_STL)
-set(CMAKE_CXX_FLAGS "-std=c++11")
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "-Wall")
 include_directories(.)
 
@@ -86,8 +84,7 @@ find_package(Threads REQUIRED)
 INCLUDE(FindPkgConfig)
 PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
 
-include_directories(
-	${Boost_INCLUDE_DIR} ${PHYSFS_INCLUDE_DIR}
+include_directories(${PHYSFS_INCLUDE_DIR}
 	${OPENGL_INCLUDE_DIR} ${SDL2_INCLUDE_DIRS}
 )
 if (OPENGL_FOUND)
@@ -101,11 +98,14 @@ else (CMAKE_SYSTEM_NAME STREQUAL Windows)
 endif (CMAKE_SYSTEM_NAME STREQUAL Windows)
 
 add_executable(blobby ${blobby_SRC})
-target_link_libraries(blobby lua raknet blobnet tinyxml ${RAKNET_LIBRARIES} ${PHYSFS_LIBRARY} ${OPENGL_LIBRARIES} ${SDL2_LIBRARIES} pthread)
+target_link_libraries(blobby PRIVATE tinyxml Boost::boost)
+target_link_libraries(blobby PRIVATE lua raknet blobnet ${RAKNET_LIBRARIES} ${PHYSFS_LIBRARY} ${OPENGL_LIBRARIES}
+		${SDL2_LIBRARIES} pthread)
 
 if (UNIX)
 	add_executable(blobby-server ${blobby-server_SRC})
-	target_link_libraries(blobby-server lua raknet blobnet tinyxml ${RAKNET_LIBRARIES} ${PHYSFS_LIBRARY} ${SDL2_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+	target_link_libraries(blobby-server PRIVATE lua raknet blobnet tinyxml ${RAKNET_LIBRARIES} ${PHYSFS_LIBRARY}
+			${SDL2_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 endif (UNIX)
 
 if (CMAKE_SYSTEM_NAME STREQUAL Windows)

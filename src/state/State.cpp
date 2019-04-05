@@ -43,8 +43,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* implementation */
 
 // static state functions
-boost::scoped_ptr<State> State::mCurrentState(nullptr);
-boost::scoped_ptr<State> State::mStateToSwitchTo(nullptr);
+std::unique_ptr<State> State::mCurrentState(nullptr);
+std::unique_ptr<State> State::mStateToSwitchTo(nullptr);
 
 
 void State::deinit()

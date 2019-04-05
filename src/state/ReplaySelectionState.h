@@ -24,8 +24,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <vector>
 
-#include <boost/scoped_ptr.hpp>
-
 class DuelMatch;
 class ReplayPlayer;
 class IReplayLoader;
@@ -45,7 +43,7 @@ private:
 	std::vector<std::string> mReplayFiles;
 	unsigned mSelectedReplay;
 	bool mShowReplayInfo;
-	boost::scoped_ptr<IReplayLoader> mReplayLoader;
+	std::unique_ptr<IReplayLoader> mReplayLoader;
 
 	bool mChecksumError;
 	bool mVersionError;

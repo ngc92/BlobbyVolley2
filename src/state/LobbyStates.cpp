@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <iostream>
 
-#include <boost/lexical_cast.hpp>
 #include <boost/make_shared.hpp>
 #include <utility>
 #include "raknet/RakClient.h"
@@ -58,7 +57,7 @@ void LobbyState::step_impl()
 				RakNet::BitStream stream = makeEnterServerPacket( mLocalPlayer );
 				mClient->Send(&stream, LOW_PRIORITY, RELIABLE_ORDERED, 0);
 
-				mSubState = boost::make_shared<LobbyMainSubstate>(mClient, 0, 0, 3);
+				mSubState = std::make_shared<LobbyMainSubstate>(mClient, 0, 0, 3);
 				break;
 			}
 			case ID_CONNECTION_ATTEMPT_FAILED:
@@ -114,7 +113,7 @@ void LobbyState::step_impl()
 
 					// find out which settings most closely resemble the local config
 					bool first_config = mPreferedSpeed == -1; // detect whether we set config for the first time
-					boost::shared_ptr<IUserConfigReader> config = IUserConfigReader::createUserConfigReader("config.xml");
+					std::shared_ptr<IUserConfigReader> config = IUserConfigReader::createUserConfigReader("config.xml");
 
 					// speed
 					int speed = config->getInteger("gamefps");
@@ -142,15 +141,15 @@ void LobbyState::step_impl()
 					// if this is the first time we receive the config, create new main substate
 					if( first_config )
 					{
-						mSubState = boost::make_shared<LobbyMainSubstate>(mClient, mPreferedSpeed, mPreferedRules, mPreferedScore);
+						mSubState = std::make_shared<LobbyMainSubstate>(mClient, mPreferedSpeed, mPreferedRules, mPreferedScore);
 					}
 
 				} else if((LobbyPacketType)t == LobbyPacketType::GAME_STATUS)
 				{
-					mSubState = boost::make_shared<LobbyGameSubstate>(mClient, in);
+					mSubState = std::make_shared<LobbyGameSubstate>(mClient, in);
 				} else if((LobbyPacketType)t == LobbyPacketType::REMOVED_FROM_GAME)
 				{
-					mSubState = boost::make_shared<LobbyMainSubstate>(mClient, mPreferedSpeed, mPreferedRules, mPreferedScore);
+					mSubState = std::make_shared<LobbyMainSubstate>(mClient, mPreferedSpeed, mPreferedRules, mPreferedScore);
 				}
 				}
 				break;
@@ -243,7 +242,7 @@ const char* LobbyState::getStateName() const
 // ----------------------------------------------------------------------------
 // 				M a i n     S u b s t a t e
 // ----------------------------------------------------------------------------
-LobbyMainSubstate::LobbyMainSubstate(boost::shared_ptr<RakClient> client,
+LobbyMainSubstate::LobbyMainSubstate(std::shared_ptr<RakClient> client,
 									unsigned prefspeed, unsigned prefrules, unsigned prefscore ) :
 	mClient(std::move(std::move(client))),
 	mChosenSpeed( prefspeed ),
@@ -281,10 +280,10 @@ void LobbyMainSubstate::step(const ServerStatusData& status)
 		// info panel contents:
 		//  * gamespeed
 		imgui.doText(GEN_ID, Vector2(435, 100), TextManager::getSingleton()->getString(TextManager::NET_SPEED) +
-					 boost::lexical_cast<std::string>(int(0.5 + 100.0 / 75.0 * status.mPossibleSpeeds.at(status.getGame(gameIndex).speed))) + "%");
+					 std::to_string(int(0.5 + 100.0 / 75.0 * status.mPossibleSpeeds.at(status.getGame(gameIndex).speed))) + "%");
 		//  * points
 		imgui.doText(GEN_ID, Vector2(435, 135), TextManager::getSingleton()->getString(TextManager::NET_POINTS) +
-											 boost::lexical_cast<std::string>(status.getGame(gameIndex).score) );
+											 std::to_string(status.getGame(gameIndex).score) );
 
 		//  * rulesfile
 		imgui.doText(GEN_ID, Vector2(435, 170), TextManager::getSingleton()->getString(TextManager::NET_RULES_TITLE) );
@@ -317,13 +316,13 @@ void LobbyMainSubstate::step(const ServerStatusData& status)
 		// info panel contents:
 		//  * gamespeed
 		if(imgui.doButton(GEN_ID, Vector2(435, 100), TextManager::getSingleton()->getString(TextManager::NET_SPEED) +
-					 boost::lexical_cast<std::string>(int(0.5 + 100.0 / 75.0 * status.mPossibleSpeeds.at(mChosenSpeed))) + "%"))
+					 std::to_string(int(0.5 + 100.0 / 75.0 * status.mPossibleSpeeds.at(mChosenSpeed))) + "%"))
 		{
 			mChosenSpeed = (mChosenSpeed + 1) % status.mPossibleSpeeds.size();
 		}
 		//  * points
 		if(imgui.doButton(GEN_ID, Vector2(435, 135), TextManager::getSingleton()->getString(TextManager::NET_POINTS) +
-											 boost::lexical_cast<std::string>( mPossibleScores.at(mChosenScore) ) ))
+											 std::to_string(mPossibleScores.at(mChosenScore) ) ))
 		{
 			mChosenScore = (mChosenScore + 1) % mPossibleScores.size();
 		}
@@ -362,7 +361,7 @@ void LobbyMainSubstate::step(const ServerStatusData& status)
 // 			"Host" State Substate
 // -----------------------------------------------------------------------------------------
 
-LobbyGameSubstate::LobbyGameSubstate(boost::shared_ptr<RakClient> client, const boost::shared_ptr<GenericIn>& in):
+LobbyGameSubstate::LobbyGameSubstate(std::shared_ptr<RakClient> client, const std::shared_ptr<GenericIn>& in):
 	mClient(std::move( std::move(client) ))
 {
  	in->uint32( mGameID );
@@ -399,10 +398,10 @@ void LobbyGameSubstate::step( const ServerStatusData& status )
 	// info panel contents:
 	//  * gamespeed
 	imgui.doText(GEN_ID, Vector2(435, 100), TextManager::getSingleton()->getString(TextManager::NET_SPEED) +
-				 boost::lexical_cast<std::string>(int(0.5 + 100.0 / 75.0 * status.mPossibleSpeeds.at(mSpeed))) + "%");
+				 std::to_string(int(0.5 + 100.0 / 75.0 * status.mPossibleSpeeds.at(mSpeed))) + "%");
 	//  * points
 	imgui.doText(GEN_ID, Vector2(435, 135), TextManager::getSingleton()->getString(TextManager::NET_POINTS) +
-										 boost::lexical_cast<std::string>( mScore ) );
+										 std::to_string(mScore ) );
 	//  * rulesfile
 	imgui.doText(GEN_ID, Vector2(435, 170), TextManager::getSingleton()->getString(TextManager::NET_RULES_TITLE) );
 	std::string rulesstring = status.mPossibleRules.at(mRules) + TextManager::getSingleton()->getString(TextManager::NET_RULES_BY);

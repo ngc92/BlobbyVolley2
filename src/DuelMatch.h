@@ -22,8 +22,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <string>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "GameLogic.h"
 #include "Vector.h"
@@ -54,7 +53,7 @@ class DuelMatch : public ObjectCounter<DuelMatch>
 		DuelMatch(bool remote, const std::string& rules, int score_to_win = 0);
 
 		void setPlayers( const PlayerIdentity& lplayer, const PlayerIdentity& rplayer);
-		void setInputSources(const boost::shared_ptr<InputSource>& linput, const boost::shared_ptr<InputSource>& rinput );
+		void setInputSources(const std::shared_ptr<InputSource>& linput, const std::shared_ptr<InputSource>& rinput );
 
 		~DuelMatch();
 
@@ -117,7 +116,7 @@ class DuelMatch : public ObjectCounter<DuelMatch>
 		DuelMatchState getState() const;
 
 		//Input stuff for recording and playing replays
-		boost::shared_ptr<InputSource> getInputSource(PlayerSide player) const;
+		std::shared_ptr<InputSource> getInputSource(PlayerSide player) const;
 
 		PlayerIdentity getPlayer(PlayerSide player) const;
 		PlayerIdentity& getPlayer(PlayerSide player);
@@ -131,9 +130,9 @@ class DuelMatch : public ObjectCounter<DuelMatch>
 
 	private:
 
-		boost::scoped_ptr<PhysicWorld> mPhysicWorld;
+		std::unique_ptr<PhysicWorld> mPhysicWorld;
 
-		boost::shared_ptr<InputSource> mInputSources[MAX_PLAYERS];
+		std::shared_ptr<InputSource> mInputSources[MAX_PLAYERS];
 		PlayerInput mTransformedInput[MAX_PLAYERS];
 
 		PlayerIdentity mPlayers[MAX_PLAYERS];

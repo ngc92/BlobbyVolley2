@@ -67,7 +67,7 @@ protected:
 	void saveReplay(ReplayRecorder& recorder);
 
 
-	boost::scoped_ptr<DuelMatch> mMatch;
+	std::unique_ptr<DuelMatch> mMatch;
 
 	// ui helper variable for storing a filename
 	bool mSaveReplay;

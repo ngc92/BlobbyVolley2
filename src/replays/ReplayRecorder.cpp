@@ -80,7 +80,7 @@ void writeAttribute(FileWrite& file, const char* name, const T& value)
 	file.write( stream.str() );
 }
 
-void ReplayRecorder::save( const boost::shared_ptr<FileWrite>& file) const
+void ReplayRecorder::save( const std::shared_ptr<FileWrite>& file) const
 {
 	constexpr const char* xmlHeader = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\n<replay>\n";
 	constexpr const char* xmlFooter = "</replay>\n\n";
@@ -136,7 +136,7 @@ void ReplayRecorder::save( const boost::shared_ptr<FileWrite>& file) const
 	file->write(xmlFooter);
 	file->close();
 }
-void ReplayRecorder::send(const boost::shared_ptr<GenericOut>& target) const
+void ReplayRecorder::send(const std::shared_ptr<GenericOut>& target) const
 {
 	target->string(mPlayerNames[LEFT_PLAYER]);
 	target->string(mPlayerNames[RIGHT_PLAYER]);
@@ -154,7 +154,7 @@ void ReplayRecorder::send(const boost::shared_ptr<GenericOut>& target) const
 	target->generic<std::vector<ReplaySavePoint> > (mSavePoints);
 }
 
-void ReplayRecorder::receive(const boost::shared_ptr<GenericIn>& source)
+void ReplayRecorder::receive(const std::shared_ptr<GenericIn>& source)
 {
 	source->string(mPlayerNames[LEFT_PLAYER]);
 	source->string(mPlayerNames[RIGHT_PLAYER]);
