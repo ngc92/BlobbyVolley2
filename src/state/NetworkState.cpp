@@ -417,9 +417,9 @@ void NetworkGameState::step_impl()
 	}
 	else if (mWaitingForReplay)
 	{
-		imgui.doOverlay(GEN_ID, Vector2(150, 200), Vector2(650, 400));
-		imgui.doText(GEN_ID, Vector2(190, 220), TextManager::RP_WAIT_REPLAY);
-		if (imgui.doButton(GEN_ID, Vector2(440, 330), TextManager::LBL_CANCEL))
+        imgui.doOverlay(Vector2(150, 200), Vector2(650, 400));
+        imgui.doText(Vector2(190, 220), TextManager::RP_WAIT_REPLAY);
+		if (imgui.doButton(Vector2(440, 330), TextManager::LBL_CANCEL))
 		{
 			mSaveReplay = false;
 			mWaitingForReplay = false;
@@ -431,30 +431,30 @@ void NetworkGameState::step_impl()
 	{
 		case WAITING_FOR_OPPONENT:
 		{
-			imgui.doOverlay(GEN_ID, Vector2(100.0, 210.0),
-					Vector2(700.0, 310.0));
-			imgui.doText(GEN_ID, Vector2(150.0, 250.0),
-					TextManager::GAME_WAITING);
+            imgui.doOverlay(Vector2(100.0, 210.0),
+                            Vector2(700.0, 310.0));
+            imgui.doText(Vector2(150.0, 250.0),
+                         TextManager::GAME_WAITING);
 			break;
 		}
 		case OPPONENT_DISCONNECTED:
 		{
 			imgui.doCursor();
-			imgui.doOverlay(GEN_ID, Vector2(100.0, 210.0), Vector2(700.0, 390.0));
-			imgui.doText(GEN_ID, Vector2(140.0, 240.0),	TextManager::GAME_OPP_LEFT);
+            imgui.doOverlay(Vector2(100.0, 210.0), Vector2(700.0, 390.0));
+            imgui.doText(Vector2(140.0, 240.0), TextManager::GAME_OPP_LEFT);
 
-			if (imgui.doButton(GEN_ID, Vector2(230.0, 290.0), TextManager::LBL_OK))
+			if (imgui.doButton(Vector2(230.0, 290.0), TextManager::LBL_OK))
 			{
 				switchState(new MainMenuState);
 			}
 
-			if (imgui.doButton(GEN_ID, Vector2(350.0, 290.0), TextManager::RP_SAVE))
+			if (imgui.doButton(Vector2(350.0, 290.0), TextManager::RP_SAVE))
 			{
 				mSaveReplay = true;
 				imgui.resetSelection();
 			}
 
-			if (imgui.doButton(GEN_ID, Vector2(250.0, 340.0), TextManager::NET_STAY_ON_SERVER))
+			if (imgui.doButton(Vector2(250.0, 340.0), TextManager::NET_STAY_ON_SERVER))
 			{
 				// Send a blobby server connection request
 				RakNet::BitStream stream;
@@ -468,16 +468,16 @@ void NetworkGameState::step_impl()
 		case DISCONNECTED:
 		{
 			imgui.doCursor();
-			imgui.doOverlay(GEN_ID, Vector2(100.0, 210.0),
-					Vector2(700.0, 370.0));
-			imgui.doText(GEN_ID, Vector2(120.0, 250.0),
-					TextManager::NET_DISCONNECT);
-			if (imgui.doButton(GEN_ID, Vector2(230.0, 320.0),
+            imgui.doOverlay(Vector2(100.0, 210.0),
+                            Vector2(700.0, 370.0));
+            imgui.doText(Vector2(120.0, 250.0),
+                         TextManager::NET_DISCONNECT);
+			if (imgui.doButton(Vector2(230.0, 320.0),
 					TextManager::LBL_OK))
 			{
 				switchState(new MainMenuState);
 			}
-			if (imgui.doButton(GEN_ID, Vector2(350.0, 320.0), TextManager::RP_SAVE))
+			if (imgui.doButton(Vector2(350.0, 320.0), TextManager::RP_SAVE))
 			{
 				mSaveReplay = true;
 				imgui.resetSelection();
@@ -487,9 +487,9 @@ void NetworkGameState::step_impl()
 		case SERVER_FULL:
 		{
 			imgui.doCursor();
-			imgui.doOverlay(GEN_ID, Vector2(100.0, 210.0),Vector2(700.0, 370.0));
-			imgui.doText(GEN_ID, Vector2(200.0, 250.0),	TextManager::NET_SERVER_FULL);
-			if (imgui.doButton(GEN_ID, Vector2(350.0, 300.0), TextManager::LBL_OK))
+            imgui.doOverlay(Vector2(100.0, 210.0), Vector2(700.0, 370.0));
+            imgui.doText(Vector2(200.0, 250.0), TextManager::NET_SERVER_FULL);
+			if (imgui.doButton(Vector2(350.0, 300.0), TextManager::LBL_OK))
 			{
 				switchState(new MainMenuState);
 			}
@@ -519,11 +519,11 @@ void NetworkGameState::step_impl()
 		{
 			mMatch->updateEvents(); // so the last whistle will be sounded
 			displayWinningPlayerScreen(mWinningPlayer);
-			if (imgui.doButton(GEN_ID, Vector2(290, 360), TextManager::LBL_OK))
+			if (imgui.doButton(Vector2(290, 360), TextManager::LBL_OK))
 			{
 				switchState(new MainMenuState());
 			}
-			if (imgui.doButton(GEN_ID, Vector2(380, 360), TextManager::RP_SAVE))
+			if (imgui.doButton(Vector2(380, 360), TextManager::RP_SAVE))
 			{
 				mSaveReplay = true;
 				imgui.resetSelection();
@@ -532,17 +532,17 @@ void NetworkGameState::step_impl()
 		}
 		case PAUSING:
 		{
-			imgui.doOverlay(GEN_ID, Vector2(175, 20), Vector2(625, 175));
-			imgui.doText(GEN_ID, Vector2(275, 35), TextManager::GAME_PAUSED);
-			if (imgui.doButton(GEN_ID, Vector2(205, 95), TextManager::LBL_CONTINUE))
+            imgui.doOverlay(Vector2(175, 20), Vector2(625, 175));
+            imgui.doText(Vector2(275, 35), TextManager::GAME_PAUSED);
+			if (imgui.doButton(Vector2(205, 95), TextManager::LBL_CONTINUE))
 			{
 				RakNet::BitStream stream;
 				stream.Write((unsigned char)ID_UNPAUSE);
 				mClient->Send(&stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
 			}
 			// Chat
-			imgui.doChatbox(GEN_ID, Vector2(10, 190), Vector2(790, 450), mChatlog, mSelectedChatmessage, mChatOrigin);
-			if (imgui.doEditbox(GEN_ID, Vector2(30, 460), 30, mChattext, mChatCursorPosition, 0, true))
+			imgui.doChatbox(Vector2(10, 190), Vector2(790, 450), mChatlog, mSelectedChatmessage, mChatOrigin);
+			if (imgui.doEditbox(Vector2(30, 460), 30, mChattext, mChatCursorPosition, 0, true))
 			{
 
 				// GUI-Hack, so that we can send messages
@@ -563,11 +563,11 @@ void NetworkGameState::step_impl()
 					SoundManager::getSingleton().playSound("sounds/chat.wav", ROUND_START_SOUND_VOLUME);
 				}
 			}
-			if (imgui.doButton(GEN_ID, Vector2(500, 95), TextManager::GAME_QUIT))
+			if (imgui.doButton(Vector2(500, 95), TextManager::GAME_QUIT))
 			{
 				switchState(new MainMenuState);
 			}
-			if (imgui.doButton(GEN_ID, Vector2(285, 125), TextManager::RP_SAVE))
+			if (imgui.doButton(Vector2(285, 125), TextManager::RP_SAVE))
 			{
 				mSaveReplay = true;
 				imgui.resetSelection();

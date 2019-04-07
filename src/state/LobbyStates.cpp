@@ -177,12 +177,12 @@ void LobbyState::step_impl()
 	IMGUI& imgui = IMGUI::getSingleton();
 
 	imgui.doCursor();
-	imgui.doImage(GEN_ID, Vector2(400.0, 300.0), "background");
-	imgui.doOverlay(GEN_ID, Vector2(0.0, 0.0), Vector2(800.0, 600.0));
+    imgui.doImage(Vector2(400.0, 300.0), "background");
+    imgui.doOverlay(Vector2(0.0, 0.0), Vector2(800.0, 600.0));
 	imgui.doInactiveMode(false);
 
 	// server name
-	imgui.doText(GEN_ID, Vector2(400 - 12 * std::strlen(mInfo.name), 20), mInfo.name);
+    imgui.doText(Vector2(400 - 12 * std::strlen(mInfo.name), 20), mInfo.name);
 
 	// server description
 	if (mLobbyState != ConnectionState::CONNECTED )
@@ -190,30 +190,30 @@ void LobbyState::step_impl()
 		// server description
 		if (mLobbyState == ConnectionState::CONNECTING )
 		{
-			imgui.doText(GEN_ID, Vector2( 100, 55 ), TextManager::NET_CONNECTING);
+            imgui.doText(Vector2(100, 55), TextManager::NET_CONNECTING);
 		}
 		else if (mLobbyState == ConnectionState::DISCONNECTED )
 		{
-			imgui.doText(GEN_ID, Vector2( 100, 55 ), TextManager::NET_DISCONNECT);
+            imgui.doText(Vector2(100, 55), TextManager::NET_DISCONNECT);
 		}
 		else if (mLobbyState == ConnectionState::CONNECTION_FAILED )
 		{
-			imgui.doText(GEN_ID, Vector2( 100, 55 ), TextManager::NET_CON_FAILED);
+            imgui.doText(Vector2(100, 55), TextManager::NET_CON_FAILED);
 		}
 
 		// empty player list
 		unsigned int s;
-		imgui.doSelectbox(GEN_ID, Vector2(25.0, 90.0), Vector2(375.0, 470.0), std::vector<std::string>{}, s);
+		imgui.doSelectbox(Vector2(25.0, 90.0), Vector2(375.0, 470.0), std::vector<std::string>{}, s);
 
 		// empty info panel
-		imgui.doOverlay(GEN_ID, Vector2(425.0, 90.0), Vector2(775.0, 470.0));
+        imgui.doOverlay(Vector2(425.0, 90.0), Vector2(775.0, 470.0));
 	}
 	else
 	{
 		std::string description = mInfo.description;
 		for (unsigned int i = 0; i < description.length(); i += 63)
 		{
-			imgui.doText(GEN_ID, Vector2(25, 55 + i / 63 * 15), description.substr(i, 63), TF_SMALL_FONT);
+            imgui.doText(Vector2(25, 55 + i / 63 * 15), description.substr(i, 63), TF_SMALL_FONT);
 		}
 
 
@@ -223,7 +223,7 @@ void LobbyState::step_impl()
 
 
 	// back button
-	if (imgui.doButton(GEN_ID, Vector2(50, 530), TextManager::LBL_CANCEL))
+	if (imgui.doButton(Vector2(50, 530), TextManager::LBL_CANCEL))
 	{
 		if( mPrevious == PreviousState::ONLINE )
 			switchState( new OnlineSearchState );
@@ -264,7 +264,7 @@ void LobbyMainSubstate::step(const ServerStatusData& status)
 		gamelist.push_back( game.name );
 	}
 
-	bool doEnterGame = imgui.doSelectbox(GEN_ID, Vector2(25.0, 90.0), Vector2(375.0, 470.0), gamelist, mSelectedGame) == SBA_DBL_CLICK;
+	bool doEnterGame = imgui.doSelectbox(Vector2(25.0, 90.0), Vector2(375.0, 470.0), gamelist, mSelectedGame) == SBA_DBL_CLICK;
 
 	// if selected game is invalid (i.e. a game was removed and the reference now is wrong), set to random
 	if(mSelectedGame >= gamelist.size())
@@ -275,26 +275,27 @@ void LobbyMainSubstate::step(const ServerStatusData& status)
 		unsigned gameIndex = mSelectedGame - 1;
 
 		// info panel
-		imgui.doOverlay(GEN_ID, Vector2(425.0, 90.0), Vector2(775.0, 470.0));
+        imgui.doOverlay(Vector2(425.0, 90.0), Vector2(775.0, 470.0));
 
 		// info panel contents:
 		//  * gamespeed
-		imgui.doText(GEN_ID, Vector2(435, 100), TextManager::getSingleton()->getString(TextManager::NET_SPEED) +
-					 std::to_string(int(0.5 + 100.0 / 75.0 * status.mPossibleSpeeds.at(status.getGame(gameIndex).speed))) + "%");
+        imgui.doText(Vector2(435, 100), TextManager::getSingleton()->getString(TextManager::NET_SPEED) +
+                                        std::to_string(int(0.5 + 100.0 / 75.0 * status.mPossibleSpeeds.at(
+                                                status.getGame(gameIndex).speed))) + "%");
 		//  * points
-		imgui.doText(GEN_ID, Vector2(435, 135), TextManager::getSingleton()->getString(TextManager::NET_POINTS) +
-											 std::to_string(status.getGame(gameIndex).score) );
+        imgui.doText(Vector2(435, 135), TextManager::getSingleton()->getString(TextManager::NET_POINTS) +
+                                        std::to_string(status.getGame(gameIndex).score));
 
 		//  * rulesfile
-		imgui.doText(GEN_ID, Vector2(435, 170), TextManager::getSingleton()->getString(TextManager::NET_RULES_TITLE) );
+        imgui.doText(Vector2(435, 170), TextManager::getSingleton()->getString(TextManager::NET_RULES_TITLE));
 		std::string rulesstring = status.mPossibleRules.at(status.getGame(gameIndex).rules);
 		for (unsigned int i = 0; i < rulesstring.length(); i += 25)
 		{
-			imgui.doText(GEN_ID, Vector2(445, 205 + i / 25 * 15), rulesstring.substr(i, 25), TF_SMALL_FONT);
+            imgui.doText(Vector2(445, 205 + i / 25 * 15), rulesstring.substr(i, 25), TF_SMALL_FONT);
 		}
 
 		// open game button
-		if( imgui.doButton(GEN_ID, Vector2(435, 430), TextManager::getSingleton()->getString(TextManager::NET_JOIN) ) ||
+		if( imgui.doButton(Vector2(435, 430), TextManager::getSingleton()->getString(TextManager::NET_JOIN) ) ||
 			doEnterGame)
 		{
 			// send open game packet to server
@@ -311,24 +312,24 @@ void LobbyMainSubstate::step(const ServerStatusData& status)
 	else
 	{
 		// info panel
-		imgui.doOverlay(GEN_ID, Vector2(425.0, 90.0), Vector2(775.0, 470.0));
+        imgui.doOverlay(Vector2(425.0, 90.0), Vector2(775.0, 470.0));
 
 		// info panel contents:
 		//  * gamespeed
-		if(imgui.doButton(GEN_ID, Vector2(435, 100), TextManager::getSingleton()->getString(TextManager::NET_SPEED) +
+		if(imgui.doButton(Vector2(435, 100), TextManager::getSingleton()->getString(TextManager::NET_SPEED) +
 					 std::to_string(int(0.5 + 100.0 / 75.0 * status.mPossibleSpeeds.at(mChosenSpeed))) + "%"))
 		{
 			mChosenSpeed = (mChosenSpeed + 1) % status.mPossibleSpeeds.size();
 		}
 		//  * points
-		if(imgui.doButton(GEN_ID, Vector2(435, 135), TextManager::getSingleton()->getString(TextManager::NET_POINTS) +
+		if(imgui.doButton(Vector2(435, 135), TextManager::getSingleton()->getString(TextManager::NET_POINTS) +
 											 std::to_string(mPossibleScores.at(mChosenScore) ) ))
 		{
 			mChosenScore = (mChosenScore + 1) % mPossibleScores.size();
 		}
 
 		//  * rulesfile
-		if(imgui.doButton(GEN_ID, Vector2(435, 170), TextManager::getSingleton()->getString(TextManager::NET_RULES_TITLE) ))
+		if(imgui.doButton(Vector2(435, 170), TextManager::getSingleton()->getString(TextManager::NET_RULES_TITLE) ))
 		{
 			mChosenRules = (mChosenRules + 1) % status.mPossibleRules.size();
 		}
@@ -336,11 +337,11 @@ void LobbyMainSubstate::step(const ServerStatusData& status)
 		rulesstring += " " + status.mPossibleRulesAuthor.at(mChosenRules);
 		for (unsigned int i = 0; i < rulesstring.length(); i += 25)
 		{
-			imgui.doText(GEN_ID, Vector2(445, 205 + i / 25 * 15), rulesstring.substr(i, 25), TF_SMALL_FONT);
+            imgui.doText(Vector2(445, 205 + i / 25 * 15), rulesstring.substr(i, 25), TF_SMALL_FONT);
 		}
 
 		// open game button
-		if( imgui.doButton(GEN_ID, Vector2(435, 430), TextManager::getSingleton()->getString(TextManager::NET_OPEN_GAME) ))
+		if( imgui.doButton(Vector2(435, 430), TextManager::getSingleton()->getString(TextManager::NET_OPEN_GAME) ))
 		{
 			// send open game packet to server
 			RakNet::BitStream stream;
@@ -387,34 +388,34 @@ void LobbyGameSubstate::step( const ServerStatusData& status )
 	}
 
 	bool doEnterGame = false;
-	if( imgui.doSelectbox(GEN_ID, Vector2(25.0, 90.0), Vector2(375.0, 470.0), mOtherPlayerNames, mSelectedPlayer) == SBA_DBL_CLICK )
+	if( imgui.doSelectbox(Vector2(25.0, 90.0), Vector2(375.0, 470.0), mOtherPlayerNames, mSelectedPlayer) == SBA_DBL_CLICK )
 	{
 		doEnterGame = true;
 	}
 
 	// info panel
-	imgui.doOverlay(GEN_ID, Vector2(425.0, 90.0), Vector2(775.0, 470.0));
+    imgui.doOverlay(Vector2(425.0, 90.0), Vector2(775.0, 470.0));
 
 	// info panel contents:
 	//  * gamespeed
-	imgui.doText(GEN_ID, Vector2(435, 100), TextManager::getSingleton()->getString(TextManager::NET_SPEED) +
-				 std::to_string(int(0.5 + 100.0 / 75.0 * status.mPossibleSpeeds.at(mSpeed))) + "%");
+    imgui.doText(Vector2(435, 100), TextManager::getSingleton()->getString(TextManager::NET_SPEED) +
+                                    std::to_string(int(0.5 + 100.0 / 75.0 * status.mPossibleSpeeds.at(mSpeed))) + "%");
 	//  * points
-	imgui.doText(GEN_ID, Vector2(435, 135), TextManager::getSingleton()->getString(TextManager::NET_POINTS) +
-										 std::to_string(mScore ) );
+    imgui.doText(Vector2(435, 135), TextManager::getSingleton()->getString(TextManager::NET_POINTS) +
+                                    std::to_string(mScore));
 	//  * rulesfile
-	imgui.doText(GEN_ID, Vector2(435, 170), TextManager::getSingleton()->getString(TextManager::NET_RULES_TITLE) );
+    imgui.doText(Vector2(435, 170), TextManager::getSingleton()->getString(TextManager::NET_RULES_TITLE));
 	std::string rulesstring = status.mPossibleRules.at(mRules) + TextManager::getSingleton()->getString(TextManager::NET_RULES_BY);
 	rulesstring += " " + status.mPossibleRulesAuthor.at(mRules);
 	for (unsigned int i = 0; i < rulesstring.length(); i += 25)
 	{
-		imgui.doText(GEN_ID, Vector2(445, 205 + i / 25 * 15), rulesstring.substr(i, 25), TF_SMALL_FONT);
+        imgui.doText(Vector2(445, 205 + i / 25 * 15), rulesstring.substr(i, 25), TF_SMALL_FONT);
 	}
 
 	// open game button
 	if( mIsHost )
 	{
-		if( imgui.doButton(GEN_ID, Vector2(435, 395), TextManager::getSingleton()->getString(TextManager::NET_LEAVE) ) )
+		if( imgui.doButton(Vector2(435, 395), TextManager::getSingleton()->getString(TextManager::NET_LEAVE) ) )
 		{
 			RakNet::BitStream stream;
 			stream.Write((unsigned char)ID_LOBBY);
@@ -422,7 +423,7 @@ void LobbyGameSubstate::step( const ServerStatusData& status )
 			mClient->Send(&stream, LOW_PRIORITY, RELIABLE_ORDERED, 0);
 		}
 
-		if( !no_players && (imgui.doButton(GEN_ID, Vector2(435, 430), TextManager::getSingleton()->getString(TextManager::MNU_LABEL_START) ) || doEnterGame) )
+		if( !no_players && (imgui.doButton(Vector2(435, 430), TextManager::getSingleton()->getString(TextManager::MNU_LABEL_START) ) || doEnterGame) )
 		{
 			// Start Game
 			RakNet::BitStream stream;
@@ -435,11 +436,11 @@ void LobbyGameSubstate::step( const ServerStatusData& status )
 
 		if( no_players )
 		{
-			imgui.doText(GEN_ID, Vector2(435, 430), TextManager::getSingleton()->getString(TextManager::GAME_WAITING));
+            imgui.doText(Vector2(435, 430), TextManager::getSingleton()->getString(TextManager::GAME_WAITING));
 		}
 	} else
 	{
-		if( imgui.doButton(GEN_ID, Vector2(435, 430), TextManager::getSingleton()->getString(TextManager::NET_LEAVE) ) )
+		if( imgui.doButton(Vector2(435, 430), TextManager::getSingleton()->getString(TextManager::NET_LEAVE) ) )
 		{
 			RakNet::BitStream stream;
 			stream.Write((unsigned char)ID_LOBBY);

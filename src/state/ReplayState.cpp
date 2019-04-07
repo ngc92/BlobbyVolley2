@@ -128,8 +128,8 @@ void ReplayState::step_impl()
 
 	// draw the progress bar
 	Vector2 prog_pos = Vector2(50, 600-22);
-	imgui.doOverlay(GEN_ID, prog_pos, Vector2(750, 600-3), Color(0,0,0));
-	imgui.doOverlay(GEN_ID, prog_pos, Vector2(700*mReplayPlayer->getPlayProgress()+50, 600-3), Color(0,255,0));
+    imgui.doOverlay(prog_pos, Vector2(750, 600 - 3), Color(0, 0, 0));
+    imgui.doOverlay(prog_pos, Vector2(700 * mReplayPlayer->getPlayProgress() + 50, 600 - 3), Color(0, 255, 0));
 
 	PlayerSide side = NO_PLAYER;
 	if (mReplayPlayer->endOfFile())
@@ -146,10 +146,11 @@ void ReplayState::step_impl()
 	}
 
 	// play/pause button
-	imgui.doOverlay(GEN_ID, Vector2(350, 535.0), Vector2(450, 575.0));
-	bool pause_click = imgui.doImageButton(GEN_ID, Vector2(400, 555), Vector2(24, 24), mPaused ? "gfx/btn_play.bmp" : "gfx/btn_pause.bmp");
-	bool fast_click = imgui.doImageButton(GEN_ID, Vector2(430, 555), Vector2(24, 24),  "gfx/btn_fast.bmp");
-	bool slow_click = imgui.doImageButton(GEN_ID, Vector2(370, 555), Vector2(24, 24),  "gfx/btn_slow.bmp");
+    imgui.doOverlay(Vector2(350, 535.0), Vector2(450, 575.0));
+	bool pause_click = imgui.doImageButton(Vector2(400, 555), Vector2(24, 24),
+                                           mPaused ? "gfx/btn_play.bmp" : "gfx/btn_pause.bmp");
+	bool fast_click = imgui.doImageButton(Vector2(430, 555), Vector2(24, 24), "gfx/btn_fast.bmp");
+	bool slow_click = imgui.doImageButton(Vector2(370, 555), Vector2(24, 24), "gfx/btn_slow.bmp");
 
 	// handle these image buttons. IMGUI is not capable of doing this.
 	if(side == NO_PLAYER)
@@ -201,12 +202,12 @@ void ReplayState::step_impl()
 	{
 		displayWinningPlayerScreen(side);
 
-		if (imgui.doButton(GEN_ID, Vector2(290, 350), TextManager::LBL_OK))
+		if (imgui.doButton(Vector2(290, 350), TextManager::LBL_OK))
 		{
 			switchState(new ReplaySelectionState());
 			return;
 		}
-		if (imgui.doButton(GEN_ID, Vector2(400, 350), TextManager::RP_SHOW_AGAIN))
+		if (imgui.doButton(Vector2(400, 350), TextManager::RP_SHOW_AGAIN))
 		{
 			// we don't have to reset the match, cause we don't use lua rules
 			// we just have to jump to the beginning

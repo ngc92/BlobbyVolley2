@@ -32,9 +32,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "BlobbyDebug.h"
 
 
-
-#define GEN_ID IMGUI::getSingleton().getNextId()
-
 enum SelectBoxAction
 {
 	SBA_NONE = 0,
@@ -57,25 +54,25 @@ class IMGUI : public ObjectCounter<IMGUI>
 		void end();
 		void resetSelection();
 
-		void doImage(int id, const Vector2& position, const std::string& name, const Vector2& size = Vector2(0,0));
-		void doText(int id, const Vector2& position, const std::string& text, unsigned int flags = TF_NORMAL);
-		void doText(int id, const Vector2& position, TextManager::STRING text, unsigned int flags = TF_NORMAL);
-		void doOverlay(int id, const Vector2& pos1, const Vector2& pos2, const Color& col = Color(0, 0, 0), float alpha = 0.65);
+		void doImage(const Vector2& position, const std::string& name, const Vector2& size = Vector2(0, 0));
+		void doText(const Vector2& position, const std::string& text, unsigned int flags = TF_NORMAL);
+		void doText(const Vector2& position, TextManager::STRING text, unsigned int flags = TF_NORMAL);
+		void doOverlay(const Vector2& pos1, const Vector2& pos2, const Color& col = Color(0, 0, 0), float alpha = 0.65);
 		void doCursor(bool draw = true);
 
-		bool doButton(int id, const Vector2& position, const std::string& text, unsigned int flags = TF_NORMAL);
-		bool doButton(int id, const Vector2& position, TextManager::STRING text, unsigned int flags = TF_NORMAL);
+		bool doButton(const Vector2& position, const std::string& text, unsigned int flags = TF_NORMAL);
+		bool doButton(const Vector2& position, TextManager::STRING text, unsigned int flags = TF_NORMAL);
 
 		// draws an image that also works as a button
 		// for now, it is not included in keyboard navigation, so it is more like a clickable image than a real button
 		/// \todo the size parameter should be calculated from the passed image
-		bool doImageButton(int id, const Vector2& position, const Vector2& size, const std::string& image);
+        bool doImageButton(const Vector2& position, const Vector2& size, const std::string& image);
 
-		bool doScrollbar(int id, const Vector2& position, float& value);
-		bool doEditbox(int id, const Vector2& position, unsigned length, std::string& text, unsigned& cpos, unsigned int flags = TF_NORMAL, bool force_active = false);
-		SelectBoxAction doSelectbox(int id, const Vector2& pos1, const Vector2& pos2, const std::vector<std::string>& entries, unsigned& selected, unsigned int flags = TF_NORMAL);
-		void doChatbox(int id, const Vector2& pos1, const Vector2& pos2, const std::vector<std::string>& entries, unsigned& selected, const std::vector<bool>& local, unsigned int flags = TF_NORMAL);
-		bool doBlob(int id, const Vector2& position, const Color& col);
+		bool doScrollbar(const Vector2& position, float& value);
+		bool doEditbox(const Vector2& position, unsigned length, std::string& text, unsigned& cpos, unsigned int flags = TF_NORMAL, bool force_active = false);
+		SelectBoxAction doSelectbox(const Vector2& pos1, const Vector2& pos2, const std::vector<std::string>& entries, unsigned& selected, unsigned int flags = TF_NORMAL);
+		void doChatbox(const Vector2& pos1, const Vector2& pos2, const std::vector<std::string>& entries, unsigned& selected, const std::vector<bool>& local, unsigned int flags = TF_NORMAL);
+		bool doBlob(const Vector2& position, const Color& col);
 
 		bool usingCursor() const;
 		void doInactiveMode(bool inactive) { mInactive = inactive; }

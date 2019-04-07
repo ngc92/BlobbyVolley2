@@ -234,8 +234,8 @@ void NetworkSearchState::step_impl()
 	IMGUI& imgui = IMGUI::getSingleton();
 
 	imgui.doCursor();
-	imgui.doImage(GEN_ID, Vector2(400.0, 300.0), "background");
-	imgui.doOverlay(GEN_ID, Vector2(0.0, 0.0), Vector2(800.0, 600.0));
+    imgui.doImage(Vector2(400.0, 300.0), "background");
+    imgui.doOverlay(Vector2(0.0, 0.0), Vector2(800.0, 600.0));
 	imgui.doInactiveMode(false);
 
 	if (mDisplayInfo || mEnteringServer)
@@ -243,10 +243,10 @@ void NetworkSearchState::step_impl()
 		imgui.doInactiveMode(true);
 	}
 
-	if (imgui.doButton(GEN_ID, Vector2(10, 20), TextManager::NET_SERVER_SCAN))
+	if (imgui.doButton(Vector2(10, 20), TextManager::NET_SERVER_SCAN))
 		searchServers();
 
-	if (imgui.doButton(GEN_ID, Vector2(420, 20), TextManager::NET_DIRECT_CONNECT) &&
+	if (imgui.doButton(Vector2(420, 20), TextManager::NET_DIRECT_CONNECT) &&
 			!mEnteringServer)
 	{
 		mEnteringServer = true;
@@ -261,12 +261,12 @@ void NetworkSearchState::step_impl()
 		servernames.push_back(std::string(mScannedServer.name) + " (" + std::to_string(mScannedServer.waitingplayers) + ")" );
 	}
 
-	if( imgui.doSelectbox(GEN_ID, Vector2(25.0, 60.0), Vector2(775.0, 470.0), servernames, mSelectedServer) == SBA_DBL_CLICK )
+	if( imgui.doSelectbox(Vector2(25.0, 60.0), Vector2(775.0, 470.0), servernames, mSelectedServer) == SBA_DBL_CLICK )
 	{
 		doEnterServer = true;
 	}
 
-	if (imgui.doButton(GEN_ID, Vector2(50, 480), TextManager::NET_SERVER_INFO) &&
+	if (imgui.doButton(Vector2(50, 480), TextManager::NET_SERVER_INFO) &&
 			!mDisplayInfo && !mScannedServers.empty())
 	{
 		mDisplayInfo = true;
@@ -276,10 +276,10 @@ void NetworkSearchState::step_impl()
 	if (mEnteringServer)
 	{
 		imgui.doInactiveMode(false);
-		imgui.doOverlay(GEN_ID, Vector2(100.0, 200.0), Vector2(650.0, 400.0));
+        imgui.doOverlay(Vector2(100.0, 200.0), Vector2(650.0, 400.0));
 		// Game crashes if the mEnteredServer is not a possible input
-		imgui.doEditbox(GEN_ID, Vector2(130.0, 210.0), 20, mEnteredServer, mServerBoxPosition);
-		if (imgui.doButton(GEN_ID, Vector2(270.0, 300.0), TextManager::LBL_OK))
+		imgui.doEditbox(Vector2(130.0, 210.0), 20, mEnteredServer, mServerBoxPosition);
+		if (imgui.doButton(Vector2(270.0, 300.0), TextManager::LBL_OK))
 		{
 			/// \todo adapt direct connect
 			std::string server = mEnteredServer;
@@ -308,7 +308,7 @@ void NetworkSearchState::step_impl()
 			mEnteringServer = false;
 			imgui.resetSelection();
 		}
-		if (imgui.doButton(GEN_ID, Vector2(370.0, 300.0), TextManager::LBL_CANCEL))
+		if (imgui.doButton(Vector2(370.0, 300.0), TextManager::LBL_CANCEL))
 		{
 			mEnteringServer = false;
 			imgui.resetSelection();
@@ -319,26 +319,26 @@ void NetworkSearchState::step_impl()
 	if (mDisplayInfo)
 	{
 		imgui.doInactiveMode(false);
-		imgui.doOverlay(GEN_ID, Vector2(40.0, 80.0), Vector2(760.0, 440.0), Color(0,0,0), 1.0);
-		imgui.doText(GEN_ID, Vector2(50, 100), mScannedServers[mSelectedServer].name);
-		imgui.doText(GEN_ID, Vector2(50, 130), mScannedServers[mSelectedServer].hostname);
+        imgui.doOverlay(Vector2(40.0, 80.0), Vector2(760.0, 440.0), Color(0, 0, 0), 1.0);
+        imgui.doText(Vector2(50, 100), mScannedServers[mSelectedServer].name);
+        imgui.doText(Vector2(50, 130), mScannedServers[mSelectedServer].hostname);
 
 		std::stringstream activegames;
 		activegames << TextManager::getSingleton()->getString(TextManager::NET_ACTIVE_GAMES)
 					<< mScannedServers[mSelectedServer].activegames;
-		imgui.doText(GEN_ID, Vector2(50, 160), activegames.str());
+        imgui.doText(Vector2(50, 160), activegames.str());
 		std::stringstream waitingplayer;
 		waitingplayer << TextManager::getSingleton()->getString(TextManager::NET_WAITING_PLAYER)
 					  << mScannedServers[mSelectedServer].waitingplayers;
-		imgui.doText(GEN_ID, Vector2(50, 190), waitingplayer.str());
+        imgui.doText(Vector2(50, 190), waitingplayer.str());
 		std::string description = mScannedServers[mSelectedServer].description;
 		for (unsigned int i = 0; i < description.length(); i += 29)
 		{
-			imgui.doText(GEN_ID, Vector2(50, 250 + i / 29 * 30),
-					description.substr(i, 29));
+            imgui.doText(Vector2(50, 250 + i / 29 * 30),
+                         description.substr(i, 29));
 		}
 
-		if (imgui.doButton(GEN_ID, Vector2(410, 405), TextManager::LBL_OK))
+		if (imgui.doButton(Vector2(410, 405), TextManager::LBL_OK))
 		{
 			mDisplayInfo = false;
 			imgui.resetSelection();
@@ -346,7 +346,7 @@ void NetworkSearchState::step_impl()
 		imgui.doInactiveMode(true);
 	}
 
-	if (imgui.doButton(GEN_ID, Vector2(450, 480), TextManager::NET_HOST_GAME) &&
+	if (imgui.doButton(Vector2(450, 480), TextManager::NET_HOST_GAME) &&
 			!mDisplayInfo)
 	{
 		auto server_func = []()
@@ -397,21 +397,21 @@ void NetworkSearchState::step_impl()
 					sizeof(mHostedServer->hostname));
 	}
 
-	if ((imgui.doButton(GEN_ID, Vector2(230, 530), TextManager::LBL_OK) && !mScannedServers.empty())
+	if ((imgui.doButton(Vector2(230, 530), TextManager::LBL_OK) && !mScannedServers.empty())
 			|| doEnterServer)
 	{
 		ServerInfo server = mScannedServers[mSelectedServer];
 		switchState(new LobbyState(server, dynamic_cast<OnlineSearchState*>(this) == nullptr ? PreviousState::LAN : PreviousState::ONLINE));
 	}
-	if (imgui.doButton(GEN_ID, Vector2(480, 530), TextManager::LBL_CANCEL))
+	if (imgui.doButton(Vector2(480, 530), TextManager::LBL_CANCEL))
 	{
 		switchState(new MainMenuState);
 	}
 
 	if(mDisplayUpdateNotification)
 	{
-		imgui.doOverlay(GEN_ID, Vector2(71, 572), Vector2(729, 590), Color(128, 0, 0));
-		imgui.doText(GEN_ID, Vector2(85, 577), TextManager::UPDATE_NOTIFICATION, TF_SMALL_FONT);
+        imgui.doOverlay(Vector2(71, 572), Vector2(729, 590), Color(128, 0, 0));
+        imgui.doText(Vector2(85, 577), TextManager::UPDATE_NOTIFICATION, TF_SMALL_FONT);
 	}
 }
 

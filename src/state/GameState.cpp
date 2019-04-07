@@ -102,14 +102,14 @@ void GameState::presentGameUI()
 	// Scores
 	char textBuffer[64];
 	snprintf(textBuffer, 8, mMatch->getServingPlayer() == LEFT_PLAYER ? "%02d!" : "%02d ", mMatch->getScore(LEFT_PLAYER));
-	imgui.doText(GEN_ID, Vector2(24, 24), textBuffer);
+    imgui.doText(Vector2(24, 24), textBuffer);
 	snprintf(textBuffer, 8, mMatch->getServingPlayer() == RIGHT_PLAYER ? "%02d!" : "%02d ", mMatch->getScore(RIGHT_PLAYER));
-	imgui.doText(GEN_ID, Vector2(800-24, 24), textBuffer, TF_ALIGN_RIGHT);
+    imgui.doText(Vector2(800 - 24, 24), textBuffer, TF_ALIGN_RIGHT);
 
 	// blob name / time textfields
-	imgui.doText(GEN_ID, Vector2(12, 550), mMatch->getPlayer(LEFT_PLAYER).getName());
-	imgui.doText(GEN_ID, Vector2(788, 550), mMatch->getPlayer(RIGHT_PLAYER).getName(), TF_ALIGN_RIGHT);
-	imgui.doText(GEN_ID, Vector2(400, 24), mMatch->getClock().getTimeString(), TF_ALIGN_CENTER);
+    imgui.doText(Vector2(12, 550), mMatch->getPlayer(LEFT_PLAYER).getName());
+    imgui.doText(Vector2(788, 550), mMatch->getPlayer(RIGHT_PLAYER).getName(), TF_ALIGN_RIGHT);
+    imgui.doText(Vector2(400, 24), mMatch->getClock().getTimeString(), TF_ALIGN_CENTER);
 }
 
 bool GameState::displaySaveReplayPrompt()
@@ -118,14 +118,14 @@ bool GameState::displaySaveReplayPrompt()
 
 	imgui.doCursor();
 
-	imgui.doOverlay(GEN_ID, Vector2(150, 200), Vector2(650, 400));
-	imgui.doText(GEN_ID, Vector2(190, 220), TextManager::RP_SAVE_NAME);
+    imgui.doOverlay(Vector2(150, 200), Vector2(650, 400));
+    imgui.doText(Vector2(190, 220), TextManager::RP_SAVE_NAME);
 	static unsigned cpos;
-	imgui.doEditbox(GEN_ID, Vector2(180, 270), 18, mFilename, cpos);
+	imgui.doEditbox(Vector2(180, 270), 18, mFilename, cpos);
 
 	bool doSave = false;
 
-	if(imgui.doButton(GEN_ID, Vector2(220, 330), TextManager::LBL_OK))
+	if(imgui.doButton(Vector2(220, 330), TextManager::LBL_OK))
 	{
 		if(!mFilename.empty())
 		{
@@ -134,7 +134,7 @@ bool GameState::displaySaveReplayPrompt()
 		}
 	}
 
-	if (imgui.doButton(GEN_ID, Vector2(440, 330), TextManager::LBL_CANCEL))
+	if (imgui.doButton(Vector2(440, 330), TextManager::LBL_CANCEL))
 	{
 		mSaveReplay = false;
 		imgui.resetSelection();
@@ -149,13 +149,13 @@ bool GameState::displayErrorMessageBox()
 
 	imgui.doCursor();
 
-	imgui.doOverlay(GEN_ID, Vector2(100, 200), Vector2(700, 360));
+    imgui.doOverlay(Vector2(100, 200), Vector2(700, 360));
 	size_t split = mErrorMessage.find(':');
 	std::string mProblem = mErrorMessage.substr(0, split);
 	std::string mInfo = mErrorMessage.substr(split+1);
-	imgui.doText(GEN_ID, Vector2(120, 220), mProblem);
-	imgui.doText(GEN_ID, Vector2(120, 260), mInfo);
-	if(imgui.doButton(GEN_ID, Vector2(330, 320), TextManager::LBL_OK))
+    imgui.doText(Vector2(120, 220), mProblem);
+    imgui.doText(Vector2(120, 260), mInfo);
+	if(imgui.doButton(Vector2(330, 320), TextManager::LBL_OK))
 	{
 		mErrorMessage = "";
 		return true;
@@ -168,10 +168,10 @@ bool GameState::displayWinningPlayerScreen(PlayerSide winner)
 	auto& imgui = IMGUI::getSingleton();
 
 	std::string tmp = mMatch->getPlayer(winner).getName();
-	imgui.doOverlay(GEN_ID, Vector2(200, 150), Vector2(700, 450));
-	imgui.doImage(GEN_ID, Vector2(200, 250), "gfx/pokal.bmp");
-	imgui.doText(GEN_ID, Vector2(274, 240), tmp);
-	imgui.doText(GEN_ID, Vector2(274, 300), TextManager::GAME_WIN);
+    imgui.doOverlay(Vector2(200, 150), Vector2(700, 450));
+    imgui.doImage(Vector2(200, 250), "gfx/pokal.bmp");
+    imgui.doText(Vector2(274, 240), tmp);
+    imgui.doText(Vector2(274, 300), TextManager::GAME_WIN);
 	imgui.doCursor();
 
 	return false;

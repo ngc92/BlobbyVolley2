@@ -113,18 +113,18 @@ void MainMenuState::step_impl()
 	IMGUI& imgui = IMGUI::getSingleton();
 
 	imgui.doCursor();
-	imgui.doImage(GEN_ID, Vector2(400.0, 300.0), "background");
-	imgui.doOverlay(GEN_ID, Vector2(0.0, 0.0), Vector2(800.0, 600.0));
-	imgui.doImage(GEN_ID, Vector2(250.0, 210.0), "gfx/titel.bmp");
-	if (imgui.doButton(GEN_ID, Vector2(434, 300.0), TextManager::MNU_LABEL_ONLINE))
+    imgui.doImage(Vector2(400.0, 300.0), "background");
+    imgui.doOverlay(Vector2(0.0, 0.0), Vector2(800.0, 600.0));
+    imgui.doImage(Vector2(250.0, 210.0), "gfx/titel.bmp");
+	if (imgui.doButton(Vector2(434, 300.0), TextManager::MNU_LABEL_ONLINE))
 	{
 		switchState( new OnlineSearchState() );
 	}
-	if (imgui.doButton(GEN_ID, Vector2(434, 340.0), TextManager::MNU_LABEL_LAN))
+	if (imgui.doButton(Vector2(434, 340.0), TextManager::MNU_LABEL_LAN))
 	{
 		switchState( new LANSearchState() );
 	}
-	if (imgui.doButton(GEN_ID, Vector2(434.0, 380.0), TextManager::MNU_LABEL_START))
+	if (imgui.doButton(Vector2(434.0, 380.0), TextManager::MNU_LABEL_START))
 	{
 		try
 		{
@@ -139,22 +139,22 @@ void MainMenuState::step_impl()
 		}
 	}
 
-	if (imgui.doButton(GEN_ID, Vector2(434.0, 420.0), TextManager::MNU_LABEL_OPTIONS))
+	if (imgui.doButton(Vector2(434.0, 420.0), TextManager::MNU_LABEL_OPTIONS))
 	{
 		switchState(new OptionState());
 	}
 
-	if (imgui.doButton(GEN_ID, Vector2(434.0, 460.0), TextManager::MNU_LABEL_REPLAY))
+	if (imgui.doButton(Vector2(434.0, 460.0), TextManager::MNU_LABEL_REPLAY))
 	{
 		switchState(new ReplaySelectionState());
 	}
 
-	if (imgui.doButton(GEN_ID, Vector2(434.0, 500.0), TextManager::MNU_LABEL_CREDITS))
+	if (imgui.doButton(Vector2(434.0, 500.0), TextManager::MNU_LABEL_CREDITS))
 	{
 		switchState(new CreditsState());
 	}
 
-	if (imgui.doButton(GEN_ID, Vector2(434.0, 540.0), TextManager::MNU_LABEL_EXIT))
+	if (imgui.doButton(Vector2(434.0, 540.0), TextManager::MNU_LABEL_EXIT))
 	{
 		InputManager::getSingleton()->setEndBlobby();
 	}
@@ -174,35 +174,35 @@ void CreditsState::step_impl()
 {
 	IMGUI& imgui = IMGUI::getSingleton();
 	imgui.doCursor();
-	imgui.doImage(GEN_ID, Vector2(400.0, 300.0), "background");
-	imgui.doOverlay(GEN_ID, Vector2(0.0, 0.0), Vector2(800.0, 600.0));
+    imgui.doImage(Vector2(400.0, 300.0), "background");
+    imgui.doOverlay(Vector2(0.0, 0.0), Vector2(800.0, 600.0));
 
 	const float xPosition = 50;
 
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition), TextManager::CRD_PROGRAMMERS);
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+30), "Daniel Knobe");
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+60), "  (daniel-knobe(at)web.de)", TF_SMALL_FONT);
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+85), "Jonathan Sieber");
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+115), "  (jonathan_sieber(at)yahoo.de)", TF_SMALL_FONT);
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+140), "Sven Rech");
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+170), "  (svenrech(at)gmx.de)", TF_SMALL_FONT);
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+195), "Erik Schultheis");
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+225), "  (erik-schultheis(at)freenet.de)", TF_SMALL_FONT);
+    imgui.doText(Vector2(xPosition, mYPosition), TextManager::CRD_PROGRAMMERS);
+    imgui.doText(Vector2(xPosition, mYPosition + 30), "Daniel Knobe");
+    imgui.doText(Vector2(xPosition, mYPosition + 60), "  (daniel-knobe(at)web.de)", TF_SMALL_FONT);
+    imgui.doText(Vector2(xPosition, mYPosition + 85), "Jonathan Sieber");
+    imgui.doText(Vector2(xPosition, mYPosition + 115), "  (jonathan_sieber(at)yahoo.de)", TF_SMALL_FONT);
+    imgui.doText(Vector2(xPosition, mYPosition + 140), "Sven Rech");
+    imgui.doText(Vector2(xPosition, mYPosition + 170), "  (svenrech(at)gmx.de)", TF_SMALL_FONT);
+    imgui.doText(Vector2(xPosition, mYPosition + 195), "Erik Schultheis");
+    imgui.doText(Vector2(xPosition, mYPosition + 225), "  (erik-schultheis(at)freenet.de)", TF_SMALL_FONT);
 
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+255), TextManager::CRD_GRAPHICS);
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+285), "Silvio Mummert");
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+315), "  (mummertathome(at)t-online.de)", TF_SMALL_FONT);
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+340), "Richard Bertrand");
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+370), "  (ricbertrand(at)hotmail.com)", TF_SMALL_FONT);
+    imgui.doText(Vector2(xPosition, mYPosition + 255), TextManager::CRD_GRAPHICS);
+    imgui.doText(Vector2(xPosition, mYPosition + 285), "Silvio Mummert");
+    imgui.doText(Vector2(xPosition, mYPosition + 315), "  (mummertathome(at)t-online.de)", TF_SMALL_FONT);
+    imgui.doText(Vector2(xPosition, mYPosition + 340), "Richard Bertrand");
+    imgui.doText(Vector2(xPosition, mYPosition + 370), "  (ricbertrand(at)hotmail.com)", TF_SMALL_FONT);
 
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+415), TextManager::CRD_THX);
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+445), "Daniel Skoraszewsky");
-	imgui.doText(GEN_ID, Vector2(xPosition, mYPosition+475), "  (skoraszewsky(at)t-online.de)", TF_SMALL_FONT);
+    imgui.doText(Vector2(xPosition, mYPosition + 415), TextManager::CRD_THX);
+    imgui.doText(Vector2(xPosition, mYPosition + 445), "Daniel Skoraszewsky");
+    imgui.doText(Vector2(xPosition, mYPosition + 475), "  (skoraszewsky(at)t-online.de)", TF_SMALL_FONT);
 
 	if (mYPosition > 20)
 		mYPosition -= 2.5;
 
-	if (imgui.doButton(GEN_ID, Vector2(400.0, 560.0), TextManager::LBL_CANCEL))
+	if (imgui.doButton(Vector2(400.0, 560.0), TextManager::LBL_CANCEL))
 	{
 		switchState(new MainMenuState());
 	}

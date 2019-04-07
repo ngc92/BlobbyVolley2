@@ -228,22 +228,22 @@ void IMGUI::end()
 	}
 }
 
-void IMGUI::doImage(int id, const Vector2& position, const std::string& name, const Vector2& size)
+void IMGUI::doImage(const Vector2& position, const std::string& name, const Vector2& size)
 {
 	QueueObject obj;
 	obj.type = IMAGE;
-	obj.id = id;
+	obj.id = getNextId();
 	obj.pos1 = position;
 	obj.pos2 = size;
 	obj.text = name;
 	mQueue->push(obj);
 }
 
-void IMGUI::doText(int id, const Vector2& position, const std::string& text, unsigned int flags)
+void IMGUI::doText(const Vector2& position, const std::string& text, unsigned int flags)
 {
 	QueueObject obj;
 	obj.type = TEXT;
-	obj.id = id;
+	obj.id = getNextId();
 	obj.pos1 = position;
 
 	int fontSize = flags & TF_SMALL_FONT ? FONT_WIDTH_SMALL : FONT_WIDTH_NORMAL;
@@ -264,16 +264,16 @@ void IMGUI::doText(int id, const Vector2& position, const std::string& text, uns
 	mQueue->push(obj);
 }
 
-void IMGUI::doText(int id, const Vector2& position, TextManager::STRING text, unsigned int flags)
+void IMGUI::doText(const Vector2& position, TextManager::STRING text, unsigned int flags)
 {
-	doText(id, position, TextManager::getSingleton()->getString(text), flags);
+    doText(position, TextManager::getSingleton()->getString(text), flags);
 }
 
-void IMGUI::doOverlay(int id, const Vector2& pos1, const Vector2& pos2, const Color& col, float alpha)
+void IMGUI::doOverlay(const Vector2& pos1, const Vector2& pos2, const Color& col, float alpha)
 {
 	QueueObject obj;
 	obj.type = OVERLAY;
-	obj.id = id;
+	obj.id = getNextId();
 	obj.pos1 = pos1;
 	obj.pos2 = pos2;
 	obj.col = col;
@@ -282,13 +282,14 @@ void IMGUI::doOverlay(int id, const Vector2& pos1, const Vector2& pos2, const Co
 	RenderManager::getSingleton().redraw();
 }
 
-bool IMGUI::doButton(int id, const Vector2& position, TextManager::STRING text, unsigned int flags)
+bool IMGUI::doButton(const Vector2& position, TextManager::STRING text, unsigned int flags)
 {
-	return doButton(id, position, TextManager::getSingleton()->getString(text), flags);
+	return doButton(position, TextManager::getSingleton()->getString(text), flags);
 }
 
-bool IMGUI::doButton(int id, const Vector2& position, const std::string& text, unsigned int flags)
+bool IMGUI::doButton(const Vector2& position, const std::string& text, unsigned int flags)
 {
+    int id = getNextId();
 	bool clicked = false;
 	QueueObject obj;
 	obj.id = id;
@@ -402,9 +403,9 @@ bool IMGUI::doButton(int id, const Vector2& position, const std::string& text, u
 	return clicked;
 }
 
-bool IMGUI::doImageButton(int id, const Vector2& position, const Vector2& size, const std::string& image)
+bool IMGUI::doImageButton(const Vector2& position, const Vector2& size, const std::string& image)
 {
-	doImage(id, position, image);
+    doImage(position, image);
 
 	// React to mouse input.
 	if (InputManager::getSingleton()->click())
@@ -421,8 +422,9 @@ bool IMGUI::doImageButton(int id, const Vector2& position, const Vector2& size, 
 	return false;
 }
 
-bool IMGUI::doScrollbar(int id, const Vector2& position, float& value)
+bool IMGUI::doScrollbar(const Vector2& position, float& value)
 {
+    int id = getNextId();
 	QueueObject obj;
 	obj.id = id;
 	obj.pos1 = position;
@@ -545,8 +547,9 @@ void IMGUI::resetSelection()
 	mButtonReset = true;
 }
 
-bool IMGUI::doEditbox(int id, const Vector2& position, unsigned int length, std::string& text, unsigned& cpos, unsigned int flags, bool force_active)
+bool IMGUI::doEditbox(const Vector2& position, unsigned int length, std::string& text, unsigned& cpos, unsigned int flags, bool force_active)
 {
+    int id = getNextId();
 	int FontSize = (flags & TF_SMALL_FONT ? FONT_WIDTH_SMALL : FONT_WIDTH_NORMAL);
 	bool changed = false;
 	QueueObject obj;
@@ -753,8 +756,9 @@ bool IMGUI::doEditbox(int id, const Vector2& position, unsigned int length, std:
 	return changed;
 }
 
-SelectBoxAction IMGUI::doSelectbox(int id, const Vector2& pos1, const Vector2& pos2, const std::vector<std::string>& entries, unsigned int& selected, unsigned int flags)
+SelectBoxAction IMGUI::doSelectbox(const Vector2& pos1, const Vector2& pos2, const std::vector<std::string>& entries, unsigned int& selected, unsigned int flags)
 {
+    int id = getNextId();
 	int FontSize = (flags & TF_SMALL_FONT ? (FONT_WIDTH_SMALL+LINE_SPACER_SMALL) : (FONT_WIDTH_NORMAL+LINE_SPACER_NORMAL));
 	SelectBoxAction changed = SBA_NONE;
 	QueueObject obj;
@@ -886,8 +890,8 @@ SelectBoxAction IMGUI::doSelectbox(int id, const Vector2& pos1, const Vector2& p
 			}
 		}
 	}
-	doImage(GEN_ID, Vector2(pos2.x-15, pos1.y+15), "gfx/pfeil_oben.bmp");
-	doImage(GEN_ID, Vector2(pos2.x-15, pos2.y-15), "gfx/pfeil_unten.bmp");
+    doImage(Vector2(pos2.x - 15, pos1.y + 15), "gfx/pfeil_oben.bmp");
+    doImage(Vector2(pos2.x - 15, pos2.y - 15), "gfx/pfeil_unten.bmp");
 
 	first = (selected / itemsPerPage)*itemsPerPage; //recalc first
 	if ( !entries.empty() )
@@ -909,8 +913,9 @@ SelectBoxAction IMGUI::doSelectbox(int id, const Vector2& pos1, const Vector2& p
 	return changed;
 }
 
-void IMGUI::doChatbox(int id, const Vector2& pos1, const Vector2& pos2, const std::vector<std::string>& entries, unsigned int& selected, const std::vector<bool>& local, unsigned int flags)
+void IMGUI::doChatbox(const Vector2& pos1, const Vector2& pos2, const std::vector<std::string>& entries, unsigned int& selected, const std::vector<bool>& local, unsigned int flags)
 {
+    int id = getNextId();
 	assert( entries.size() == local.size() );
 	int FontSize = (flags & TF_SMALL_FONT ? (FONT_WIDTH_SMALL+LINE_SPACER_SMALL) : (FONT_WIDTH_NORMAL+LINE_SPACER_NORMAL));
 	QueueObject obj;
@@ -1021,8 +1026,8 @@ void IMGUI::doChatbox(int id, const Vector2& pos1, const Vector2& pos2, const st
 			}
 		}
 	}
-	doImage(GEN_ID, Vector2(pos2.x-15, pos1.y+15), "gfx/pfeil_oben.bmp");
-	doImage(GEN_ID, Vector2(pos2.x-15, pos2.y-15), "gfx/pfeil_unten.bmp");
+    doImage(Vector2(pos2.x - 15, pos1.y + 15), "gfx/pfeil_oben.bmp");
+    doImage(Vector2(pos2.x - 15, pos2.y - 15), "gfx/pfeil_unten.bmp");
 
 	unsigned int first = (selected / itemsPerPage) * itemsPerPage; //recalc first
 	if ( !entries.empty() )
@@ -1061,10 +1066,10 @@ void IMGUI::doChatbox(int id, const Vector2& pos1, const Vector2& pos2, const st
 }
 
 
-bool IMGUI::doBlob(int id, const Vector2& position, const Color& col)
+bool IMGUI::doBlob(const Vector2& position, const Color& col)
 {
 	QueueObject obj;
-	obj.id = id;
+	obj.id = getNextId();
 	obj.pos1 = position;
 	obj.type = BLOB;
 	obj.col = col;

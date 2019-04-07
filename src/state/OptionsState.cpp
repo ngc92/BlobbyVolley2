@@ -109,54 +109,54 @@ void OptionState::step_impl()
 
 	IMGUI& imgui = IMGUI::getSingleton();
 	imgui.doCursor();
-	imgui.doImage(GEN_ID, Vector2(400.0, 300.0), "background");
-	imgui.doOverlay(GEN_ID, Vector2(0.0, 0.0), Vector2(800.0, 600.0));
+    imgui.doImage(Vector2(400.0, 300.0), "background");
+    imgui.doOverlay(Vector2(0.0, 0.0), Vector2(800.0, 600.0));
 
-	imgui.doEditbox(GEN_ID, Vector2(5.0, 10.0), 15, mPlayerName[LEFT_PLAYER], mPlayerNamePosition[LEFT_PLAYER]);
-	imgui.doEditbox(GEN_ID, Vector2(425.0, 10.0), 15, mPlayerName[RIGHT_PLAYER], mPlayerNamePosition[RIGHT_PLAYER]);
+	imgui.doEditbox(Vector2(5.0, 10.0), 15, mPlayerName[LEFT_PLAYER], mPlayerNamePosition[LEFT_PLAYER]);
+	imgui.doEditbox(Vector2(425.0, 10.0), 15, mPlayerName[RIGHT_PLAYER], mPlayerNamePosition[RIGHT_PLAYER]);
 
-	imgui.doSelectbox(GEN_ID, Vector2(5.0, 50.0), Vector2(375.0, 300.0), mScriptNames, mPlayerOptions[LEFT_PLAYER]);
-	imgui.doSelectbox(GEN_ID, Vector2(425.0, 50.0), Vector2(795.0, 300.0), mScriptNames, mPlayerOptions[RIGHT_PLAYER]);
+	imgui.doSelectbox(Vector2(5.0, 50.0), Vector2(375.0, 300.0), mScriptNames, mPlayerOptions[LEFT_PLAYER]);
+	imgui.doSelectbox(Vector2(425.0, 50.0), Vector2(795.0, 300.0), mScriptNames, mPlayerOptions[RIGHT_PLAYER]);
 
-	imgui.doText(GEN_ID, Vector2(270.0, 310.0), TextManager::OP_DIFFICULTY );
+    imgui.doText(Vector2(270.0, 310.0), TextManager::OP_DIFFICULTY);
 
 	float f = 1.f - (float)mBotStrength[0] / MAX_BOT_DELAY;
-	imgui.doScrollbar(GEN_ID, Vector2(15.0, 350.0), f);
+	imgui.doScrollbar(Vector2(15.0, 350.0), f);
 	mBotStrength[0] = static_cast<unsigned int> ((1.f-f) * MAX_BOT_DELAY + 0.5f);
-	imgui.doText(GEN_ID, Vector2(235.0, 350.0), f > 0.66 ? TextManager::OP_STRONG :
-											 	(f > 0.33 ? TextManager::OP_MEDIUM:
-												TextManager::OP_WEAK));
+    imgui.doText(Vector2(235.0, 350.0), f > 0.66 ? TextManager::OP_STRONG :
+                                        (f > 0.33 ? TextManager::OP_MEDIUM :
+                                         TextManager::OP_WEAK));
 
 	f = 1.f - (float)mBotStrength[1] / MAX_BOT_DELAY;
-	imgui.doScrollbar(GEN_ID, Vector2(440.0, 350.0), f);
+	imgui.doScrollbar(Vector2(440.0, 350.0), f);
 	mBotStrength[1] = static_cast<unsigned int> ((1.f - f) * MAX_BOT_DELAY + 0.5f);
-	imgui.doText(GEN_ID, Vector2(660.0, 350.0), f > 0.66 ? TextManager::OP_STRONG :
-											 	(f > 0.33 ? TextManager::OP_MEDIUM:
-												TextManager::OP_WEAK));
+    imgui.doText(Vector2(660.0, 350.0), f > 0.66 ? TextManager::OP_STRONG :
+                                        (f > 0.33 ? TextManager::OP_MEDIUM :
+                                         TextManager::OP_WEAK));
 
-	if (imgui.doButton(GEN_ID, Vector2(40.0, 390.0), TextManager::OP_INPUT_OP))
+	if (imgui.doButton(Vector2(40.0, 390.0), TextManager::OP_INPUT_OP))
 	{
 		save();
 		switchState(new InputOptionsState());
 	}
 
-	if (imgui.doButton(GEN_ID, Vector2(40.0, 430.0), TextManager::OP_GFX_OP))
+	if (imgui.doButton(Vector2(40.0, 430.0), TextManager::OP_GFX_OP))
 	{
 		save();
 		switchState(new GraphicOptionsState());
 	}
-	if (imgui.doButton(GEN_ID, Vector2(40.0, 470.0), TextManager::OP_MISC))
+	if (imgui.doButton(Vector2(40.0, 470.0), TextManager::OP_MISC))
 	{
 		save();
 		switchState(new MiscOptionsState());
 	}
 
-	if (imgui.doButton(GEN_ID, Vector2(224.0, 530.0), TextManager::LBL_OK))
+	if (imgui.doButton(Vector2(224.0, 530.0), TextManager::LBL_OK))
 	{
 		save();
 		switchState(new MainMenuState());
 	}
-	if (imgui.doButton(GEN_ID, Vector2(424.0, 530.0), TextManager::LBL_CANCEL))
+	if (imgui.doButton(Vector2(424.0, 530.0), TextManager::LBL_CANCEL))
 	{
 		switchState(new MainMenuState());
 	}
@@ -219,30 +219,30 @@ void GraphicOptionsState::step_impl()
 {
 	IMGUI& imgui = IMGUI::getSingleton();
 	imgui.doCursor();
-	imgui.doImage(GEN_ID, Vector2(400.0, 300.0), "background");
-	imgui.doOverlay(GEN_ID, Vector2(0.0, 0.0), Vector2(800.0, 600.0));
+    imgui.doImage(Vector2(400.0, 300.0), "background");
+    imgui.doOverlay(Vector2(0.0, 0.0), Vector2(800.0, 600.0));
 
 #if __DESKTOP__
-	imgui.doText(GEN_ID, Vector2(34.0, 10.0), TextManager::OP_VIDEO);
+    imgui.doText(Vector2(34.0, 10.0), TextManager::OP_VIDEO);
 
-	if (imgui.doButton(GEN_ID, Vector2(34.0, 40.0), TextManager::OP_FULLSCREEN))
+	if (imgui.doButton(Vector2(34.0, 40.0), TextManager::OP_FULLSCREEN))
 		mFullscreen = true;
-	if (imgui.doButton(GEN_ID, Vector2(34.0, 70.0), TextManager::OP_WINDOW))
+	if (imgui.doButton(Vector2(34.0, 70.0), TextManager::OP_WINDOW))
 		mFullscreen = false;
 	if (mFullscreen)
-		imgui.doImage(GEN_ID, Vector2(18.0, 52.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(18.0, 52.0), "gfx/pfeil_rechts.bmp");
 	else
-		imgui.doImage(GEN_ID, Vector2(18.0, 82.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(18.0, 82.0), "gfx/pfeil_rechts.bmp");
 
-	imgui.doText(GEN_ID, Vector2(444.0, 10.0), TextManager::OP_RENDER_DEVICE);
-	if (imgui.doButton(GEN_ID, Vector2(444.0, 40.0), "OpenGL"))
+    imgui.doText(Vector2(444.0, 10.0), TextManager::OP_RENDER_DEVICE);
+	if (imgui.doButton(Vector2(444.0, 40.0), "OpenGL"))
 		mRenderer = "OpenGL";
-	if (imgui.doButton(GEN_ID, Vector2(444.0, 70.0), "SDL"))
+	if (imgui.doButton(Vector2(444.0, 70.0), "SDL"))
 		mRenderer = "SDL";
 	if (mRenderer == "OpenGL")
-		imgui.doImage(GEN_ID, Vector2(428.0, 52.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(428.0, 52.0), "gfx/pfeil_rechts.bmp");
 	else
-		imgui.doImage(GEN_ID, Vector2(428.0, 82.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(428.0, 82.0), "gfx/pfeil_rechts.bmp");
 #endif
 	float heightOfElement = 110.0;
 
@@ -250,16 +250,16 @@ void GraphicOptionsState::step_impl()
 	heightOfElement = 10.0;
 #endif
 
-	imgui.doText(GEN_ID, Vector2(34.0, heightOfElement), TextManager::OP_SHOW_SHADOW);
+    imgui.doText(Vector2(34.0, heightOfElement), TextManager::OP_SHOW_SHADOW);
 	heightOfElement += 30;
-	if (imgui.doButton(GEN_ID, Vector2(72.0, heightOfElement), TextManager::LBL_YES))
+	if (imgui.doButton(Vector2(72.0, heightOfElement), TextManager::LBL_YES))
 		mShowShadow = true;
-	if (imgui.doButton(GEN_ID, Vector2(220.0, heightOfElement), TextManager::LBL_NO))
+	if (imgui.doButton(Vector2(220.0, heightOfElement), TextManager::LBL_NO))
 		mShowShadow = false;
 	if (mShowShadow)
-		imgui.doImage(GEN_ID, Vector2(54.0, heightOfElement + 13.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(54.0, heightOfElement + 13.0), "gfx/pfeil_rechts.bmp");
 	else
-		imgui.doImage(GEN_ID, Vector2(204.0, heightOfElement + 13.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(204.0, heightOfElement + 13.0), "gfx/pfeil_rechts.bmp");
 
 #if __MOBILE__
 	float standardLineHeight = 50.0;
@@ -270,49 +270,49 @@ void GraphicOptionsState::step_impl()
 	heightOfElement += standardLineHeight;
 
 	//Blob colors:
-	imgui.doText(GEN_ID, Vector2(280.0, heightOfElement), TextManager::OP_BLOB_COLORS);
+    imgui.doText(Vector2(280.0, heightOfElement), TextManager::OP_BLOB_COLORS);
 	heightOfElement += 40.0;
 
 	float playerColorSettingsHeight = heightOfElement;
 
 	//left blob:
-	imgui.doText(GEN_ID, Vector2(34.0, heightOfElement), TextManager::OP_LEFT_PLAYER);
+    imgui.doText(Vector2(34.0, heightOfElement), TextManager::OP_LEFT_PLAYER);
 
 	heightOfElement += standardLineHeight;
 
 	{
-		imgui.doText(GEN_ID, Vector2(34.0, heightOfElement), TextManager::OP_RED);
+        imgui.doText(Vector2(34.0, heightOfElement), TextManager::OP_RED);
 		float r1 = (float)mR1/255;
-		imgui.doScrollbar(GEN_ID, Vector2(160.0, heightOfElement), r1);
+		imgui.doScrollbar(Vector2(160.0, heightOfElement), r1);
 		mR1 = (int)(r1*255);
 	}
 
 	heightOfElement += standardLineHeight;
 
 	{
-		imgui.doText(GEN_ID, Vector2(34.0, heightOfElement), TextManager::OP_GREEN);
+        imgui.doText(Vector2(34.0, heightOfElement), TextManager::OP_GREEN);
 		float g1 = (float)mG1/255;
-		imgui.doScrollbar(GEN_ID, Vector2(160.0, heightOfElement), g1);
+		imgui.doScrollbar(Vector2(160.0, heightOfElement), g1);
 		mG1 = (int)(g1*255);
 	}
 
 	heightOfElement += standardLineHeight;
 
 	{
-		imgui.doText(GEN_ID, Vector2(34.0, heightOfElement), TextManager::OP_BLUE);
+        imgui.doText(Vector2(34.0, heightOfElement), TextManager::OP_BLUE);
 		float b1 = (float)mB1/255;
-		imgui.doScrollbar(GEN_ID, Vector2(160.0, heightOfElement), b1);
+		imgui.doScrollbar(Vector2(160.0, heightOfElement), b1);
 		mB1 = (int)(b1*255);
 	}
-	imgui.doText(GEN_ID, Vector2(34.0, 360), TextManager::OP_MORPHING);
-	if (imgui.doButton(GEN_ID, Vector2(72.0, 390), TextManager::LBL_YES))
+    imgui.doText(Vector2(34.0, 360), TextManager::OP_MORPHING);
+	if (imgui.doButton(Vector2(72.0, 390), TextManager::LBL_YES))
 		mLeftMorphing = true;
-	if (imgui.doButton(GEN_ID, Vector2(220.0, 390), TextManager::LBL_NO))
+	if (imgui.doButton(Vector2(220.0, 390), TextManager::LBL_NO))
 		mLeftMorphing = false;
 	if (mLeftMorphing)
-		imgui.doImage(GEN_ID, Vector2(54.0, 402.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(54.0, 402.0), "gfx/pfeil_rechts.bmp");
 	else
-		imgui.doImage(GEN_ID, Vector2(204.0, 402.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(204.0, 402.0), "gfx/pfeil_rechts.bmp");
 	//draw left blob:
 	{
 		float time = float(SDL_GetTicks()) / 1000.0;
@@ -321,49 +321,49 @@ void GraphicOptionsState::step_impl()
 			ourCol = Color(int((sin(time*2) + 1.0) * 128),
 							int((sin(time*4) + 1.0) * 128),
 							int((sin(time*3) + 1.0) * 128));
-		imgui.doBlob(GEN_ID, Vector2(110, 500), ourCol);
+		imgui.doBlob(Vector2(110, 500), ourCol);
 	}
 
 	//right blob:
 	heightOfElement = playerColorSettingsHeight;
 
-	imgui.doText(GEN_ID, Vector2(434.0, heightOfElement), TextManager::OP_RIGHT_PLAYER);
+    imgui.doText(Vector2(434.0, heightOfElement), TextManager::OP_RIGHT_PLAYER);
 
 	heightOfElement += standardLineHeight;
 
 	{
-		imgui.doText(GEN_ID, Vector2(434.0, heightOfElement), TextManager::OP_RED);
+        imgui.doText(Vector2(434.0, heightOfElement), TextManager::OP_RED);
 		float r2 = (float)mR2/255;
-		imgui.doScrollbar(GEN_ID, Vector2(560.0, heightOfElement), r2);
+		imgui.doScrollbar(Vector2(560.0, heightOfElement), r2);
 		mR2 = (int)(r2*255);
 	}
 
 	heightOfElement += standardLineHeight;
 
 	{
-		imgui.doText(GEN_ID, Vector2(434.0, heightOfElement), TextManager::OP_GREEN);
+        imgui.doText(Vector2(434.0, heightOfElement), TextManager::OP_GREEN);
 		float g2 = (float)mG2/255;
-		imgui.doScrollbar(GEN_ID, Vector2(560.0, heightOfElement), g2);
+		imgui.doScrollbar(Vector2(560.0, heightOfElement), g2);
 		mG2 = (int)(g2*255);
 	}
 
 	heightOfElement += standardLineHeight;
 
 	{
-		imgui.doText(GEN_ID, Vector2(434.0, heightOfElement), TextManager::OP_BLUE);
+        imgui.doText(Vector2(434.0, heightOfElement), TextManager::OP_BLUE);
 		float b2 = (float)mB2/255;
-		imgui.doScrollbar(GEN_ID, Vector2(560.0, heightOfElement), b2);
+		imgui.doScrollbar(Vector2(560.0, heightOfElement), b2);
 		mB2 = (int)(b2*255);
 	}
-	imgui.doText(GEN_ID, Vector2(434.0, 360), TextManager::OP_MORPHING);
-	if (imgui.doButton(GEN_ID, Vector2(472.0, 390), TextManager::LBL_YES))
+    imgui.doText(Vector2(434.0, 360), TextManager::OP_MORPHING);
+	if (imgui.doButton(Vector2(472.0, 390), TextManager::LBL_YES))
 		mRightMorphing = true;
-	if (imgui.doButton(GEN_ID, Vector2(620.0, 390), TextManager::LBL_NO))
+	if (imgui.doButton(Vector2(620.0, 390), TextManager::LBL_NO))
 		mRightMorphing = false;
 	if (mRightMorphing)
-		imgui.doImage(GEN_ID, Vector2(454.0, 402.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(454.0, 402.0), "gfx/pfeil_rechts.bmp");
 	else
-		imgui.doImage(GEN_ID, Vector2(604.0, 402.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(604.0, 402.0), "gfx/pfeil_rechts.bmp");
 	//draw right blob:
 	{
 		float time = float(SDL_GetTicks()) / 1000.0;
@@ -372,15 +372,15 @@ void GraphicOptionsState::step_impl()
 			ourCol = Color(int((cos(time*2) + 1.0) * 128),
 							int((cos(time*4) + 1.0) * 128),
 							int((cos(time*3) + 1.0) * 128));
-		imgui.doBlob(GEN_ID, Vector2(670, 500), ourCol);
+		imgui.doBlob(Vector2(670, 500), ourCol);
 	}
 
-	if (imgui.doButton(GEN_ID, Vector2(224.0, 530.0), TextManager::LBL_OK))
+	if (imgui.doButton(Vector2(224.0, 530.0), TextManager::LBL_OK))
 	{
 		save();
 		switchState(new OptionState());
 	}
-	if (imgui.doButton(GEN_ID, Vector2(424.0, 530.0), TextManager::LBL_CANCEL))
+	if (imgui.doButton(Vector2(424.0, 530.0), TextManager::LBL_CANCEL))
 	{
 		switchState(new OptionState());
 	}
@@ -454,8 +454,8 @@ void InputOptionsState::step_impl()
 {
 	IMGUI& imgui = IMGUI::getSingleton();
 	imgui.doCursor();
-	imgui.doImage(GEN_ID, Vector2(400.0, 300.0), "background");
-	imgui.doOverlay(GEN_ID, Vector2(0.0, 0.0), Vector2(800.0, 600.0));
+    imgui.doImage(Vector2(400.0, 300.0), "background");
+    imgui.doOverlay(Vector2(0.0, 0.0), Vector2(800.0, 600.0));
 
 	std::string lastActionKey = InputManager::getSingleton()->getLastActionKey();
 
@@ -501,12 +501,12 @@ void InputOptionsState::step_impl()
 	getJoystickInput(mRightJoystick[IA_RIGHT], TextManager::OP_MOVING_RIGHT);
 	getJoystickInput(mRightJoystick[IA_JUMP], TextManager::OP_JUMPING);
 
-	if (imgui.doButton(GEN_ID, Vector2(224.0, 530.0), TextManager::LBL_OK))
+	if (imgui.doButton(Vector2(224.0, 530.0), TextManager::LBL_OK))
 	{
 		save();
 		switchState(new OptionState());
 	}
-	if (imgui.doButton(GEN_ID, Vector2(424.0, 530.0), TextManager::LBL_CANCEL))
+	if (imgui.doButton(Vector2(424.0, 530.0), TextManager::LBL_CANCEL))
 	{
 		switchState(new OptionState());
 	}
@@ -519,9 +519,9 @@ void InputOptionsState::handlePlayerInput(PlayerSide player, std::string& lastAc
 	TextManager::STRING p_str = (player == LEFT_PLAYER) ? TextManager::OP_LEFT_PLAYER : TextManager::OP_RIGHT_PLAYER;
 	std::string& device = (player == LEFT_PLAYER) ? mLeftDevice : mRightDevice;
 	int base_x = (player == LEFT_PLAYER) ? 0 : 400;
-	imgui.doText(GEN_ID, Vector2(base_x + 34.0, 10.0), p_str);
+    imgui.doText(Vector2(base_x + 34.0, 10.0), p_str);
 
-	if (imgui.doButton(GEN_ID, Vector2(base_x + 80.0, 60.0), getDeviceName(device)))
+	if (imgui.doButton(Vector2(base_x + 80.0, 60.0), getDeviceName(device)))
 	{
 		if (device == "mouse")
 		{
@@ -566,11 +566,11 @@ void InputOptionsState::handleKeyboardInput(int base_x, std::string& lastActionK
 {
 	auto& imgui = IMGUI::getSingleton();
 
-	if (imgui.doButton(GEN_ID, Vector2(base_x + 34, 350.0), TextManager::OP_SET_ALL))
+	if (imgui.doButton(Vector2(base_x + 34, 350.0), TextManager::OP_SET_ALL))
 		mSetKeyboard = base_x + 1;
 
-	imgui.doText(GEN_ID, Vector2(base_x + 34.0, 120.0), TextManager::OP_LEFT_KEY);
-	if (imgui.doButton(GEN_ID, Vector2(base_x + 50, 150.0), std::string("Key ")+input[IA_LEFT]) || mSetKeyboard == base_x + 1)
+    imgui.doText(Vector2(base_x + 34.0, 120.0), TextManager::OP_LEFT_KEY);
+	if (imgui.doButton(Vector2(base_x + 50, 150.0), std::string("Key ")+input[IA_LEFT]) || mSetKeyboard == base_x + 1)
 	{
 		lastActionKey = "";
 		mOldString = input[IA_LEFT];
@@ -583,8 +583,8 @@ void InputOptionsState::handleKeyboardInput(int base_x, std::string& lastActionK
 	if (mSetKeyboard == base_x + 2 && !input[IA_LEFT].empty())
 		mSetKeyboard = base_x + 3;
 
-	imgui.doText(GEN_ID, Vector2(base_x + 34.0, 190.0), TextManager::OP_RIGHT_KEY);
-	if (imgui.doButton(GEN_ID, Vector2(base_x + 50, 220.0), std::string("Key ")+input[IA_RIGHT]) || mSetKeyboard == base_x + 3)
+    imgui.doText(Vector2(base_x + 34.0, 190.0), TextManager::OP_RIGHT_KEY);
+	if (imgui.doButton(Vector2(base_x + 50, 220.0), std::string("Key ")+input[IA_RIGHT]) || mSetKeyboard == base_x + 3)
 	{
 		lastActionKey = "";
 		mOldString = input[IA_RIGHT];
@@ -597,8 +597,8 @@ void InputOptionsState::handleKeyboardInput(int base_x, std::string& lastActionK
 	if (mSetKeyboard == base_x + 4 && !input[IA_RIGHT].empty())
 		mSetKeyboard = base_x + 5;
 
-	imgui.doText(GEN_ID, Vector2(base_x + 34.0, 260.0), TextManager::OP_JUMP_KEY );
-	if (imgui.doButton(GEN_ID, Vector2(base_x + 50, 290.0), std::string("Key ")+input[IA_JUMP]) || mSetKeyboard == base_x + 5)
+    imgui.doText(Vector2(base_x + 34.0, 260.0), TextManager::OP_JUMP_KEY);
+	if (imgui.doButton(Vector2(base_x + 50, 290.0), std::string("Key ")+input[IA_JUMP]) || mSetKeyboard == base_x + 5)
 	{
 		lastActionKey = "";
 		mOldString = input[IA_JUMP];
@@ -616,20 +616,20 @@ void InputOptionsState::handleJoystickInput(int base_x, std::string input[])
 {
 	auto& imgui = IMGUI::getSingleton();
 
-	imgui.doText(GEN_ID, Vector2(base_x + 34.0, 120.0), TextManager::OP_LEFT_BUTTON);
-	if (imgui.doButton(GEN_ID, Vector2(base_x + 50, 150.0), input[IA_LEFT]))
+    imgui.doText(Vector2(base_x + 34.0, 120.0), TextManager::OP_LEFT_BUTTON);
+	if (imgui.doButton(Vector2(base_x + 50, 150.0), input[IA_LEFT]))
 	{
 		mOldString = input[IA_LEFT];
 		input[IA_LEFT] = "";
 	}
-	imgui.doText(GEN_ID, Vector2(base_x + 34.0, 190.0), TextManager::OP_RIGHT_BUTTON);
-	if (imgui.doButton(GEN_ID, Vector2(base_x + 50, 220.0), input[IA_RIGHT]))
+    imgui.doText(Vector2(base_x + 34.0, 190.0), TextManager::OP_RIGHT_BUTTON);
+	if (imgui.doButton(Vector2(base_x + 50, 220.0), input[IA_RIGHT]))
 	{
 		mOldString = input[IA_RIGHT];
 		input[IA_RIGHT] = "";
 	}
-	imgui.doText(GEN_ID, Vector2(base_x + 34.0, 260.0), TextManager::OP_JUMP_BUTTON);
-	if (imgui.doButton(GEN_ID, Vector2(base_x + 50, 290.0), input[IA_JUMP]))
+    imgui.doText(Vector2(base_x + 34.0, 260.0), TextManager::OP_JUMP_BUTTON);
+	if (imgui.doButton(Vector2(base_x + 50, 290.0), input[IA_JUMP]))
 	{
 		mOldString = input[IA_JUMP];
 		input[IA_JUMP] = "";
@@ -640,21 +640,21 @@ void InputOptionsState::handleMouseInput(int base_x, int& input, float& sens)
 {
 	auto& imgui = IMGUI::getSingleton();
 
-	imgui.doText(GEN_ID, Vector2(base_x + 34.0, 120.0), TextManager::OP_JUMP_BUTTON);
+    imgui.doText(Vector2(base_x + 34.0, 120.0), TextManager::OP_JUMP_BUTTON);
 	std::ostringstream text;
 	if (input >= 0)
 		text << "Button " << input;
 	else
 		text << "Button ";
-	if (imgui.doButton(GEN_ID, Vector2(base_x + 50, 150.0), text.str()))
+	if (imgui.doButton(Vector2(base_x + 50, 150.0), text.str()))
 	{
 		mOldInteger = input;
 		input = -2;
 	}
 
 	// sensitivity settings
-	imgui.doText(GEN_ID, Vector2(base_x + 34.0, 200), /*TextManager::OP_SENSITIVITY*/"SENSITIVITY");
-	imgui.doScrollbar(GEN_ID, Vector2(base_x + 50, 240), sens);
+    imgui.doText(Vector2(base_x + 34.0, 200), /*TextManager::OP_SENSITIVITY*/"SENSITIVITY");
+	imgui.doScrollbar(Vector2(base_x + 50, 240), sens);
 
 }
 
@@ -662,9 +662,9 @@ void InputOptionsState::getInputPrompt(TextManager::STRING prompt, TextManager::
 {
 	auto& imgui = IMGUI::getSingleton();
 
-	imgui.doOverlay(GEN_ID, Vector2(100.0, 150.0), Vector2(700.0, 450.0));
-	imgui.doText(GEN_ID, Vector2(400.0, 250.0), prompt, TF_ALIGN_CENTER);
-	imgui.doText(GEN_ID, Vector2(400.0, 300.0), input, TF_ALIGN_CENTER);
+    imgui.doOverlay(Vector2(100.0, 150.0), Vector2(700.0, 450.0));
+    imgui.doText(Vector2(400.0, 250.0), prompt, TF_ALIGN_CENTER);
+    imgui.doText(Vector2(400.0, 300.0), input, TF_ALIGN_CENTER);
 }
 
 void InputOptionsState::getMouseInput(int& action, TextManager::STRING input)
@@ -725,9 +725,9 @@ void InputOptionsState::step_impl()
 	imgui.doOverlay(GEN_ID, Vector2(0.0, 0.0), Vector2(800.0, 600.0));
 
 	imgui.doText(GEN_ID, Vector2(43.0, 10.0), TextManager::OP_TOUCH_TYPE);
-	if (imgui.doButton(GEN_ID, Vector2(70.0, 50.0), TextManager::OP_TOUCH_DIRECT))
+	if (imgui.doButton(Vector2(70.0, 50.0), TextManager::OP_TOUCH_DIRECT))
 		mBlobbyTouchType = 0;
-	if (imgui.doButton(GEN_ID, Vector2(70.0, 100.0), TextManager::OP_TOUCH_ARROWS))
+	if (imgui.doButton(Vector2(70.0, 100.0), TextManager::OP_TOUCH_ARROWS))
 		mBlobbyTouchType = 1;
 	if (mBlobbyTouchType == 0)
 		imgui.doImage(GEN_ID, Vector2(52.0, 62.0), "gfx/pfeil_rechts.bmp");
@@ -762,12 +762,12 @@ void InputOptionsState::step_impl()
 	imgui.doImage(GEN_ID, Vector2(525.0, 440.0), "gfx/pfeil_oben.bmp");
 
 
-	if (imgui.doButton(GEN_ID, Vector2(224.0, 530.0), TextManager::LBL_OK))
+	if (imgui.doButton(Vector2(224.0, 530.0), TextManager::LBL_OK))
 	{
 		save();
 		switchState(new OptionState());
 	}
-	if (imgui.doButton(GEN_ID, Vector2(424.0, 530.0), TextManager::LBL_CANCEL))
+	if (imgui.doButton(Vector2(424.0, 530.0), TextManager::LBL_CANCEL))
 	{
 		switchState(new OptionState());
 	}
@@ -848,28 +848,28 @@ void MiscOptionsState::step_impl()
 {
 	IMGUI& imgui = IMGUI::getSingleton();
 	imgui.doCursor();
-	imgui.doImage(GEN_ID, Vector2(400.0, 300.0), "background");
-	imgui.doOverlay(GEN_ID, Vector2(0.0, 0.0), Vector2(800.0, 600.0));
+    imgui.doImage(Vector2(400.0, 300.0), "background");
+    imgui.doOverlay(Vector2(0.0, 0.0), Vector2(800.0, 600.0));
 
-	imgui.doText(GEN_ID, Vector2(34.0, 10.0), TextManager::OP_BACKGROUND);
+    imgui.doText(Vector2(34.0, 10.0), TextManager::OP_BACKGROUND);
 	unsigned tmp = mBackground;
-	imgui.doSelectbox(GEN_ID, Vector2(34.0, 40.0), Vector2(400.0, 175.0), mBackgrounds, tmp);
+	imgui.doSelectbox(Vector2(34.0, 40.0), Vector2(400.0, 175.0), mBackgrounds, tmp);
 	if (tmp != mBackground)
 	{
 		mBackground = tmp;
 		RenderManager::getSingleton().setBackground(std::string("backgrounds/") + mBackgrounds[mBackground]);
 	}
 
-	imgui.doText(GEN_ID, Vector2(34.0, 190.0), TextManager::OP_RULES);
-	imgui.doSelectbox(GEN_ID, Vector2(34.0, 220.0), Vector2(400.0, 354.0), mRules, mRule);
+    imgui.doText(Vector2(34.0, 190.0), TextManager::OP_RULES);
+	imgui.doSelectbox(Vector2(34.0, 220.0), Vector2(400.0, 354.0), mRules, mRule);
 
-	imgui.doText(GEN_ID, Vector2(484.0, 10.0), TextManager::OP_VOLUME);
-	if (imgui.doScrollbar(GEN_ID, Vector2(484.0, 50.0), mVolume))
+    imgui.doText(Vector2(484.0, 10.0), TextManager::OP_VOLUME);
+	if (imgui.doScrollbar(Vector2(484.0, 50.0), mVolume))
 	{
 		SoundManager::getSingleton().setVolume(mVolume);
 		SoundManager::getSingleton().playSound("sounds/bums.wav", 1.0);
 	}
-	if (imgui.doButton(GEN_ID, Vector2(531.0, 80.0), TextManager::OP_MUTE))
+	if (imgui.doButton(Vector2(531.0, 80.0), TextManager::OP_MUTE))
 	{
 		mMute = !mMute;
 		SoundManager::getSingleton().setMute(mMute);
@@ -878,21 +878,21 @@ void MiscOptionsState::step_impl()
 	}
 	if (mMute)
 	{
-		imgui.doImage(GEN_ID, Vector2(513.0, 92.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(513.0, 92.0), "gfx/pfeil_rechts.bmp");
 	}
 
 #if __DESKTOP__
-	if (imgui.doButton(GEN_ID, Vector2(484.0, 120.0), TextManager::OP_FPS))
+	if (imgui.doButton(Vector2(484.0, 120.0), TextManager::OP_FPS))
 	{
 		mShowFPS = !mShowFPS;
 		SpeedController::getMainInstance()->setDrawFPS(mShowFPS);
 	}
 	if (mShowFPS)
 	{
-		imgui.doImage(GEN_ID, Vector2(466.0, 132.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(466.0, 132.0), "gfx/pfeil_rechts.bmp");
 	}
 #endif
-	if (imgui.doButton(GEN_ID, Vector2(484.0, 160.0), TextManager::OP_BLOOD))
+	if (imgui.doButton(Vector2(484.0, 160.0), TextManager::OP_BLOOD))
 	{
 		mShowBlood = !mShowBlood;
 		BloodManager::getSingleton().enable(mShowBlood);
@@ -900,59 +900,59 @@ void MiscOptionsState::step_impl()
 	}
 	if (mShowBlood)
 	{
-		imgui.doImage(GEN_ID, Vector2(466.0 ,172.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(466.0, 172.0), "gfx/pfeil_rechts.bmp");
 	}
 
-	imgui.doText(GEN_ID, Vector2(434.0, 200.0), TextManager::OP_NETWORK_SIDE);
-	if (imgui.doButton(GEN_ID, Vector2(450.0, 240.0), TextManager::OP_LEFT))
+    imgui.doText(Vector2(434.0, 200.0), TextManager::OP_NETWORK_SIDE);
+	if (imgui.doButton(Vector2(450.0, 240.0), TextManager::OP_LEFT))
 		mNetworkSide = 0;
-	if (imgui.doButton(GEN_ID, Vector2(630.0, 240.0), TextManager::OP_RIGHT))
+	if (imgui.doButton(Vector2(630.0, 240.0), TextManager::OP_RIGHT))
 		mNetworkSide = 1;
 	if (mNetworkSide == 0)
-		imgui.doImage(GEN_ID, Vector2(432.0, 252.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(432.0, 252.0), "gfx/pfeil_rechts.bmp");
 	else
-		imgui.doImage(GEN_ID, Vector2(612.0, 252.0), "gfx/pfeil_rechts.bmp");
+        imgui.doImage(Vector2(612.0, 252.0), "gfx/pfeil_rechts.bmp");
 
-	imgui.doText(GEN_ID, Vector2(484.0, 290.0), TextManager::OP_SPEED);
+    imgui.doText(Vector2(484.0, 290.0), TextManager::OP_SPEED);
 	float gamefps = (mGameFPS - 30) / 90.0;
 	if (gamefps < 0.0)
 		gamefps = 0.0;
-	imgui.doScrollbar(GEN_ID, Vector2(440.0, 330.0), gamefps);
+	imgui.doScrollbar(Vector2(440.0, 330.0), gamefps);
 		mGameFPS = (int)(gamefps*90.0+30);
-	if (imgui.doButton(GEN_ID, Vector2(155.0, 380.0), TextManager::OP_VSLOW))
+	if (imgui.doButton(Vector2(155.0, 380.0), TextManager::OP_VSLOW))
 		mGameFPS = 30;
-	if (imgui.doButton(GEN_ID, Vector2(450.0, 380.0), TextManager::OP_SLOW))
+	if (imgui.doButton(Vector2(450.0, 380.0), TextManager::OP_SLOW))
 		mGameFPS = 60;
-	if (imgui.doButton(GEN_ID, Vector2(319.0, 415.0), TextManager::OP_DEFAULT))
+	if (imgui.doButton(Vector2(319.0, 415.0), TextManager::OP_DEFAULT))
 		mGameFPS = 75;
-	if (imgui.doButton(GEN_ID, Vector2(155.0, 450.0), TextManager::OP_FAST))
+	if (imgui.doButton(Vector2(155.0, 450.0), TextManager::OP_FAST))
 		mGameFPS = 90;
-	if (imgui.doButton(GEN_ID, Vector2(410.0, 450.0), TextManager::OP_VFAST))
+	if (imgui.doButton(Vector2(410.0, 450.0), TextManager::OP_VFAST))
 		mGameFPS = 120;
 
 	std::stringstream FPSInPercent;
 	FPSInPercent << int((float)mGameFPS/75*100);
 	FPSInPercent << "%";
-	imgui.doText(GEN_ID, Vector2(660.0, 330.0), FPSInPercent.str());
+    imgui.doText(Vector2(660.0, 330.0), FPSInPercent.str());
 
 	//! \todo this must be reworked
 	auto olang = TextManager::language_names.find(TextManager::getSingleton()->getLang());
 	if(++olang == TextManager::language_names.end()){
 		olang = TextManager::language_names.begin();
 	}
-	if (imgui.doButton(GEN_ID, Vector2(300.0, 490.0), (*olang).second)){
+	if (imgui.doButton(Vector2(300.0, 490.0), (*olang).second)){
 		//! \todo autogenerierte liste mit allen lang_ dateien, namen auslesen
 		mLanguage = (*olang).first;
 		TextManager::switchLanguage(mLanguage);
 
 	}
 
-	if (imgui.doButton(GEN_ID, Vector2(224.0, 530.0), TextManager::LBL_OK))
+	if (imgui.doButton(Vector2(224.0, 530.0), TextManager::LBL_OK))
 	{
 		save();
 		switchState(new OptionState());
 	}
-	if (imgui.doButton(GEN_ID, Vector2(424.0, 530.0), TextManager::LBL_CANCEL))
+	if (imgui.doButton(Vector2(424.0, 530.0), TextManager::LBL_CANCEL))
 	{
 		switchState(new OptionState());
 	}
